@@ -5,6 +5,7 @@ import { ArrowUpRight } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { portfolio } from "@/data/portfolio"
+import { projectsData } from "@/data/projectsData"
 import DadycarSvg from "@/assets/Projects/dadycar.svg"
 import FocuseSvg from "@/assets/Projects/focuse.svg"
 import ShihanySvg from "@/assets/Projects/Shihany.svg"
@@ -15,6 +16,13 @@ const projectImages = {
   "FocusCare": FocuseSvg,
   "Shihany": ShihanySvg,
   "Resaglob": ResglobSvg,
+}
+
+const projectIdMap = {
+  "DadyCar": "dadycar",
+  "FocusCare": "focuscare",
+  "Shihany": "shihany",
+  "Resaglob": "resaglob",
 }
 
 export function Projects() {
@@ -61,7 +69,7 @@ export function Projects() {
                       </Badge>
                     ))}
                   </div>
-                  <Link to="/projects/dadycar">
+                  <Link to={`/projects/${projectIdMap[project.title] || 'dadycar'}`}>
                     <Button variant="ghost" size="sm" className="group flex items-center gap-1">
                       Check the project
                       <ArrowUpRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity" />
