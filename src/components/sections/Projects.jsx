@@ -1,4 +1,5 @@
 import * as React from "react"
+import { Link } from "react-router-dom"
 import { motion } from "framer-motion"
 import { ArrowUpRight } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
@@ -60,12 +61,12 @@ export function Projects() {
                       </Badge>
                     ))}
                   </div>
-                  <Button variant="ghost" size="sm" asChild className="group">
-                    <a href={project.live} className="flex items-center gap-1">
+                  <Link to="/projects/dadycar">
+                    <Button variant="ghost" size="sm" className="group flex items-center gap-1">
                       Check the project
                       <ArrowUpRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </a>
-                  </Button>
+                    </Button>
+                  </Link>
                 </div>
 
                 <div className="flex-1 w-full rounded-2xl overflow-hidden bg-gray-50 border border-gray-200">
