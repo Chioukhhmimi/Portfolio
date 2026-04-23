@@ -1,6 +1,6 @@
 export const portfolio = {
   name: "Hmimi Chioukh",
-  role: "Product Designer & QA Automation Engineer",
+  role: "Product Designer ",
   bio: "I design scalable SaaS platforms and digital experiences.",
   shortBio: "Sr Product Designer, UI/UX Design, AI Design, User Research",
   about: `I design operational SaaS products where clarity, speed, and structure directly impact how teams work.
@@ -75,7 +75,7 @@ By combining product thinking, system design, and AI-powered workflows, I simpli
   experience: [
     {
       company: "Dadycar",
-      role: "Product Designer & QA Automation Engineer",
+      role: "Product Designer ",
       date: "2022 - Present",
       bulletPoints: [
         "Lead product design from concept to deployment",
