@@ -25,6 +25,10 @@ export function ProjectSinglePage() {
   const { id } = useParams()
   const navigate = useNavigate()
 
+  React.useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [id])
+
   const project = React.useMemo(() => {
     return projectsData.find((p) => p.id === id) || projectsData[0]
   }, [id])

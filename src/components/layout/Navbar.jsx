@@ -1,22 +1,31 @@
 import * as React from "react"
+import { Link, useNavigate } from "react-router-dom"
 import { motion, AnimatePresence } from "framer-motion"
 import { Menu } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 
 const navLinks = [
-  { name: "Works", href: "#projects" },
-  { name: "Resume", href: "#experience" },
-  { name: "ZD System", href: "#about", badge: true },
+  { name: "Works", href: "/" },
+  { name: "Resume", href: "/" },
+  { name: "ZD System", href: "/", badge: true },
 ]
+
+const scrollToSection = (sectionId) => {
+  const element = document.getElementById(sectionId)
+  if (element) {
+    element.scrollIntoView({ behavior: "smooth" })
+  }
+}
 
 export function Navbar() {
   const [activeSection, setActiveSection] = React.useState("")
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false)
+  const navigate = useNavigate()
 
   React.useEffect(() => {
     const handleScroll = () => {
-      const sections = navLinks.map((link) => link.href.substring(1))
+      const sections = ["projects", "experience", "about"]
       const scrollPosition = window.scrollY + 100
 
       for (const section of sections.reverse()) {
@@ -36,9 +45,12 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  const handleLinkClick = (href) => {
-    setActiveSection(href.substring(1))
+  const handleLinkClick = (href, sectionId) => {
+    setActiveSection(sectionId)
     setIsMobileMenuOpen(false)
+    if (href === "/") {
+      scrollToSection(sectionId)
+    }
   }
 
   return (
@@ -47,38 +59,41 @@ export function Navbar() {
     >
       <div className="h-16 px-6 md:px-12 flex items-center justify-between">
         {/* Logo - Left */}
-        <a href="#" className="text-lg font-semibold logo-font text-gray-900 font-sans">
+        <Link to="/" className="text-lg font-semibold logo-font text-gray-900 font-sans" onClick={() => window.scrollTo(0, 0)}>
           ⵃⵎⵉⵎⵉ
-        </a>
+        </Link>
 
         {/* Nav Links - Center (Desktop only) */}
         <nav className="hidden lg:flex items-center gap-6">
-          {navLinks.map((link) => (
-            <a
-              key={link.name}
-              href={link.href}
-              onClick={() => handleLinkClick(link.href)}
-              className={cn(
-                "text-sm transition-colors inline-flex items-center gap-1",
-                activeSection === link.href.substring(1)
-                  ? "text-gray-900"
-                  : "text-gray-600 hover:text-gray-900"
-              )}
-            >
-              {link.name}
-              {link.badge && (
-                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-teal-50 text-teal-600">
-                  Coming Soon
-                </span>
-              )}
-            </a>
-          ))}
+          {navLinks.map((link, idx) => {
+            const sectionId = idx === 0 ? "projects" : idx === 1 ? "experience" : "about"
+            return (
+              <Link
+                key={link.name}
+                to={link.href}
+                onClick={() => handleLinkClick(link.href, sectionId)}
+                className={cn(
+                  "text-sm transition-colors inline-flex items-center gap-1",
+                  activeSection === sectionId
+                    ? "text-gray-900"
+                    : "text-gray-600 hover:text-gray-900"
+                )}
+              >
+                {link.name}
+                {link.badge && (
+                  <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-teal-50 text-teal-600">
+                    Coming Soon
+                  </span>
+                )}
+              </Link>
+            )
+          })}
         </nav>
 
         {/* Right Side */}
         <div className="flex items-center gap-4">
           <Button size="sm" asChild className="hidden lg:inline-flex">
-            <a href="#contact">Let's Talk</a>
+            <Link to="/">Let's Talk</Link>
           </Button>
 
           {/* Mobile Hamburger */}
@@ -114,30 +129,33 @@ export function Navbar() {
               className="absolute top-full left-0 right-0 bg-white border-b border-gray-100 lg:hidden"
             >
               <div className="px-6 py-4 space-y-1">
-                {navLinks.map((link) => (
-                  <a
-                    key={link.name}
-                    href={link.href}
-                    onClick={() => handleLinkClick(link.href)}
-                    className={cn(
-                      "block py-3 text-base font-medium transition-colors inline-flex items-center gap-2",
-                      activeSection === link.href.substring(1)
-                        ? "text-gray-900"
-                        : "text-gray-800 hover:text-gray-900"
-                    )}
-                  >
-                    {link.name}
-                    {link.badge && (
-                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-teal-50 text-teal-600">
-                        Coming Soon
-                      </span>
-                    )}
-                  </a>
-                ))}
+                {navLinks.map((link, idx) => {
+                  const sectionId = idx === 0 ? "projects" : idx === 1 ? "experience" : "about"
+                  return (
+                    <Link
+                      key={link.name}
+                      to={link.href}
+                      onClick={() => handleLinkClick(link.href, sectionId)}
+                      className={cn(
+                        "block py-3 text-base font-medium transition-colors inline-flex items-center gap-2",
+                        activeSection === sectionId
+                          ? "text-gray-900"
+                          : "text-gray-800 hover:text-gray-900"
+                      )}
+                    >
+                      {link.name}
+                      {link.badge && (
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-teal-50 text-teal-600">
+                          Coming Soon
+                        </span>
+                      )}
+                    </Link>
+                  )
+                })}
               </div>
               <div className="pt-4 pb-2 px-6">
                 <Button size="sm" asChild className="w-full justify-center">
-                  <a href="#contact">Let's Talk</a>
+                  <Link to="/">Let's Talk</Link>
                 </Button>
               </div>
             </motion.div>

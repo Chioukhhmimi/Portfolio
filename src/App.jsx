@@ -1,5 +1,5 @@
 import * as React from "react"
-import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { BrowserRouter, Routes, Route, Link, useLocation } from "react-router-dom"
 import { motion, AnimatePresence } from "framer-motion"
 import { Navbar } from "@/components/layout/Navbar"
 import { Footer } from "@/components/layout/Footer"
@@ -12,9 +12,28 @@ import { Experience } from "@/components/sections/Experience"
 import { Contact } from "@/components/sections/Contact"
 import ProjectSinglePage from "./pages/ProjectSinglePage"
 
+function ScrollToTop() {
+  const { pathname, hash } = useLocation()
+  
+  React.useEffect(() => {
+    if (hash) {
+      const id = hash.replace('#', '')
+      const element = document.getElementById(id)
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' })
+      }
+    } else {
+      window.scrollTo(0, 0)
+    }
+  }, [pathname, hash])
+  
+  return null
+}
+
 function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <div className="min-h-screen bg-white text-gray-900">
         <Navbar />
         <AnimatePresence mode="wait">
@@ -29,6 +48,7 @@ function App() {
                 <LogoStrip />
                 <Projects />
                 <Blog />
+                <Experience />
                 <Contact />
               </motion.main>
             } />
