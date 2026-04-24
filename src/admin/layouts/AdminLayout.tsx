@@ -10,7 +10,7 @@ import {
   ChevronLeft,
   LogOut
 } from "lucide-react"
-import DadycarSvg from "../../assets/Projects/dadycar.svg"
+import DadycarLogo from "../../assets/logos/dadycar.svg"
 
 const menuItems = [
   { label: "Dashboard", icon: LayoutDashboard, href: "/admin" },
@@ -31,13 +31,9 @@ export function AdminSidebar() {
         onClick={() => setMobileOpen(!mobileOpen)}
         className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-white border border-gray-200 rounded-lg"
       >
-        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          {mobileOpen ? (
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-          ) : (
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-          )}
-        </svg>
+        <Link to="/admin" onClick={() => setMobileOpen(false)}>
+          ⵃⵎ
+        </Link>
       </button>
 
       <aside 
@@ -48,12 +44,9 @@ export function AdminSidebar() {
         <div className="flex flex-col h-full">
           {/* Logo Section */}
           <div className="hidden lg:flex items-center h-16 px-4 border-b border-gray-200">
-            <Link to="/admin" className="flex items-center gap-3">
-              <img src={DadycarSvg} alt="Logo" className="w-8 h-8 object-contain" />
-              {!collapsed && (
-                <span className="font-semibold text-gray-900">Admin</span>
-              )}
-            </Link>
+            <Link to="/" className="text-lg font-semibold logo-font text-gray-900 font-sans" onClick={() => window.scrollTo(0, 0)}>
+          ⵃⵎⵉⵎⵉ
+        </Link>
             <button
               onClick={() => setCollapsed(!collapsed)}
               className="ml-auto p-1.5 rounded-md hover:bg-gray-100 text-gray-500 transition-colors"
@@ -119,7 +112,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-gray-50">
       <AdminSidebar />
-      <main className="pl-16 lg:pl-64 p-4 lg:p-8">
+      <main className="ml-16 pl-16 lg:pl-64 p-4 lg:p-8">
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
