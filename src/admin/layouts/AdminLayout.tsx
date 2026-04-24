@@ -10,6 +10,7 @@ import {
   ChevronLeft,
   LogOut
 } from "lucide-react"
+import DadycarSvg from "../../assets/Projects/dadycar.svg"
 
 const menuItems = [
   { label: "Dashboard", icon: LayoutDashboard, href: "/admin" },
@@ -45,15 +46,17 @@ export function AdminSidebar() {
         } ${mobileOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}
       >
         <div className="flex flex-col h-full">
-          <div className={`hidden lg:flex items-center h-16 px-4 border-b border-gray-200 ${collapsed ? 'justify-center' : 'justify-between'}`}>
-            {!collapsed && (
-              <Link to="/admin" className="font-semibold text-gray-900">
-                Admin
-              </Link>
-            )}
+          {/* Logo Section */}
+          <div className="hidden lg:flex items-center h-16 px-4 border-b border-gray-200">
+            <Link to="/admin" className="flex items-center gap-3">
+              <img src={DadycarSvg} alt="Logo" className="w-8 h-8 object-contain" />
+              {!collapsed && (
+                <span className="font-semibold text-gray-900">Admin</span>
+              )}
+            </Link>
             <button
               onClick={() => setCollapsed(!collapsed)}
-              className="p-1.5 rounded-md hover:bg-gray-100 text-gray-500 transition-colors"
+              className="ml-auto p-1.5 rounded-md hover:bg-gray-100 text-gray-500 transition-colors"
             >
               <ChevronLeft className={`w-4 h-4 transition-transform ${collapsed ? 'rotate-180' : ''}`} />
             </button>

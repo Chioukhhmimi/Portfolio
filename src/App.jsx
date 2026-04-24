@@ -37,11 +37,11 @@ function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
-      <div className="min-h-screen bg-white text-gray-900">
-        <Navbar />
-        <AnimatePresence mode="wait">
-          <Routes>
-            <Route path="/" element={
+      <AnimatePresence mode="wait">
+        <Routes>
+          <Route path="/" element={
+            <>
+              <Navbar />
               <motion.main
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -53,23 +53,29 @@ function App() {
                 <Blog />
                 <Contact />
               </motion.main>
-            } />
-            <Route path="/projects/:id" element={<ProjectSinglePage />} />
-            
-            {/* Admin Routes */}
-            <Route path="/admin" element={<AdminLayout><AdminDashboard /></AdminLayout>} />
-            <Route path="/admin/projects" element={<AdminLayout><ProjectsList /></AdminLayout>} />
-            <Route path="/admin/projects/new" element={<AdminLayout><ProjectForm /></AdminLayout>} />
-            <Route path="/admin/projects/:id/edit" element={<AdminLayout><ProjectForm /></AdminLayout>} />
-            <Route path="/admin/blog" element={<AdminLayout><BlogList /></AdminLayout>} />
-            <Route path="/admin/blog/new" element={<AdminLayout><BlogForm /></AdminLayout>} />
-            <Route path="/admin/blog/:id/edit" element={<AdminLayout><BlogForm /></AdminLayout>} />
-            <Route path="/admin/messages" element={<AdminLayout><MessagesList /></AdminLayout>} />
-            <Route path="/admin/messages/:id" element={<AdminLayout><MessageDetail /></AdminLayout>} />
-          </Routes>
-        </AnimatePresence>
-        <Footer />
-      </div>
+              <Footer />
+            </>
+          } />
+          <Route path="/projects/:id" element={
+            <>
+              <Navbar />
+              <ProjectSinglePage />
+              <Footer />
+            </>
+          } />
+          
+          {/* Admin Routes - No Navbar/Footer */}
+          <Route path="/admin" element={<AdminLayout><AdminDashboard /></AdminLayout>} />
+          <Route path="/admin/projects" element={<AdminLayout><ProjectsList /></AdminLayout>} />
+          <Route path="/admin/projects/new" element={<AdminLayout><ProjectForm /></AdminLayout>} />
+          <Route path="/admin/projects/:id/edit" element={<AdminLayout><ProjectForm /></AdminLayout>} />
+          <Route path="/admin/blog" element={<AdminLayout><BlogList /></AdminLayout>} />
+          <Route path="/admin/blog/new" element={<AdminLayout><BlogForm /></AdminLayout>} />
+          <Route path="/admin/blog/:id/edit" element={<AdminLayout><BlogForm /></AdminLayout>} />
+          <Route path="/admin/messages" element={<AdminLayout><MessagesList /></AdminLayout>} />
+          <Route path="/admin/messages/:id" element={<AdminLayout><MessageDetail /></AdminLayout>} />
+        </Routes>
+      </AnimatePresence>
     </BrowserRouter>
   )
 }
