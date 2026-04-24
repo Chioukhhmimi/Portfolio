@@ -41,13 +41,13 @@ export function Hero() {
           className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6"
         >
           My Name is {" "}
-          <span className="inline-block min-w-[200px] text-left">
+          <span className="inline-block min-w-[100px] text-left">
             <AnimatePresence mode="wait">
               <motion.span
                 key={roleIndex}
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ y: -20, opacity: 0 }}
+                initial={{ y: 10, opacity: 0 }}
+                animate={{ y: 0, opacity: 1}}
+                exit={{ y:   -20, opacity: 0 }}
                 transition={{ duration: 0.3 }}
                 className="text-indigo-600"
               >

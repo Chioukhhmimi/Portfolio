@@ -6,6 +6,68 @@ import { Footer } from "@/components/layout/Footer"
 import { ArrowRight } from "lucide-react"
 import { Link } from "react-router-dom"
 import { projectsData } from "@/data/projectsData"
+import DadycarDashboard from "@/assets/Projects/DadyCar/dadycar-Dashboard.svg"
+import DadycarVehicule from "@/assets/Projects/DadyCar/dadycar-Vehicule.svg"
+import DadycarBulk from "@/assets/Projects/DadyCar/dadycar-Bulk.svg"
+import DadycarBulkError from "@/assets/Projects/DadyCar/dadycar-Bulk-error.svg"
+import DadycarTelamitc from "@/assets/Projects/DadyCar/dadycar-Telamitc.svg"
+import DadycarMap from "@/assets/Projects/DadyCar/dadycar-Map.svg"
+import FocuseCareDashboard from "@/assets/Projects/FocuseCare/FocuseCare-Dashboard.svg"
+import FocuseCareConsultation from "@/assets/Projects/FocuseCare/Focusecare-consultation.svg"
+import FocuseCarePatient from "@/assets/Projects/FocuseCare/Focusecare-patient.svg"
+import FocuseCareSurgon from "@/assets/Projects/FocuseCare/Focusecare-surgon.svg"
+import FocuseCareFicherliason from "@/assets/Projects/FocuseCare/Focusecare-ficherliason.svg"
+import FocuseCareConsultationFini from "@/assets/Projects/FocuseCare/Focusecare-consultation-fini.svg"
+import ResglobHotelSearch from "@/assets/Projects/Resglob/Resglob-Hotel Search.svg"
+import ResglobClients from "@/assets/Projects/Resglob/Resglob-Clients.svg"
+import ResglobMap from "@/assets/Projects/Resglob/Resglob-Map.svg"
+import ResglobReservation from "@/assets/Projects/Resglob/Resglob-reservation.svg"
+import ResglobResume from "@/assets/Projects/Resglob/Resglob-Resume.svg"
+import ShihanyHub from "@/assets/Projects/Shihany/Shihany-hub.svg"
+import ShihanyHubTraining from "@/assets/Projects/Shihany/Shihany-hub-training.svg"
+import ShihanyPro from "@/assets/Projects/Shihany/Shihany-pro.svg"
+import ShihanyPlayer from "@/assets/Projects/Shihany/Shihany-player.svg"
+import ShihanyFed from "@/assets/Projects/Shihany/Shihany-Fed.svg"
+import ShihanyTeam from "@/assets/Projects/Shihany/Shihany-Team.svg"
+
+const dadycarImages = {
+  "dadycar-Dashboard": DadycarDashboard,
+  "dadycar-Vehicule": DadycarVehicule,
+  "dadycar-Bulk": DadycarBulk,
+  "dadycar-Bulk-error": DadycarBulkError,
+  "dadycar-Telamitc": DadycarTelamitc,
+  "dadycar-Map": DadycarMap,
+}
+
+const focuscareImages = {
+  "focuscare-Dashboard": FocuseCareDashboard,
+  "focuscare-consultation": FocuseCareConsultation,
+  "focuscare-patient": FocuseCarePatient,
+  "focuscare-surgon": FocuseCareSurgon,
+  "focuscare-ficherliason": FocuseCareFicherliason,
+  "focuscare-consultation-fini": FocuseCareConsultationFini,
+}
+
+const resaglobImages = {
+  "resaglob-Hotel Search": ResglobHotelSearch,
+  "resaglob-Clients": ResglobClients,
+  "resaglob-Map": ResglobMap,
+  "resaglob-reservation": ResglobReservation,
+  "resaglob-Resume": ResglobResume,
+}
+
+const shihanyImages = {
+  "shihany-hub": ShihanyHub,
+  "shihany-hub-training": ShihanyHubTraining,
+  "shihany-pro": ShihanyPro,
+  "shihany-player": ShihanyPlayer,
+  "shihany-fed": ShihanyFed,
+  "shihany-team": ShihanyTeam,
+}
+
+const getProjectImage = (imageKey) => {
+  return dadycarImages[imageKey] || focuscareImages[imageKey] || resaglobImages[imageKey] || shihanyImages[imageKey]
+}
 
 const fadeUp = {
   initial: { opacity: 0, y: 30 },
@@ -107,9 +169,19 @@ export function ProjectSinglePage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.35 }}
-            className="w-full rounded-2xl bg-gray-100 aspect-video mt-10 flex items-center justify-center"
+            className="w-full rounded-2xl bg-gray-100 aspect-video mt-10 overflow-hidden"
           >
-            <span className="text-gray-400 text-sm">{project.title}</span>
+            {project.heroImage && getProjectImage(project.heroImage) ? (
+              <img 
+                src={getProjectImage(project.heroImage)} 
+                alt={project.title} 
+                className="w-full h-auto"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center">
+                <span className="text-gray-400 text-sm">{project.title}</span>
+              </div>
+            )}
           </motion.div>
         </div>
 
@@ -326,9 +398,22 @@ export function ProjectSinglePage() {
               {project.screens.map((screen, index) => (
                 <div
                   key={index}
-                  className="rounded-2xl bg-gray-100 aspect-video flex items-center justify-center"
+                  className="rounded-2xl bg-gray-100 overflow-hidden"
                 >
-                  <span className="text-gray-400 text-sm">{screen.label}</span>
+                  {screen.image && getProjectImage(screen.image) ? (
+                    <img 
+                      src={getProjectImage(screen.image)} 
+                      alt={screen.label} 
+                      className="w-full h-auto"
+                    />
+                  ) : (
+                    <div className="aspect-video flex items-center justify-center">
+                      <span className="text-gray-400 text-sm">{screen.label}</span>
+                    </div>
+                  )}
+                  <div className="p-4">
+                    <span className="text-sm text-gray-500">{screen.label}</span>
+                  </div>
                 </div>
               ))}
             </div>

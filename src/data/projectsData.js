@@ -9,8 +9,9 @@ export const projectsData = [
     client: "DadyCar",
     year: "2024–2025",
     duration: "Ongoing",
+    heroImage: "dadycar-Dashboard",
 
-    context: `Fleet management in North Africa and Europe has a serious tooling problem. 
+    context: `Fleet management in and Europe has a serious tooling problem. 
 The companies that could benefit most from a modern operations platform — mid-size 
 businesses running 20 to 200 vehicles — are stuck between two bad options: expensive 
 enterprise software built for corporations, or nothing at all. Before DadyCar, their 
@@ -20,7 +21,7 @@ actually happening across their fleet in real time. DadyCar was built to close t
 gap — one unified platform where a fleet manager can see everything, act on anything, 
 and lose nothing.`,
 
-    userInsight: `Our primary user is a 45+ year old fleet manager, office-based, 
+    userInsight: `Our primary user is a 40+ year old fleet manager, office-based, 
 non-technical, spending 6–8 hours a day inside this dashboard. This single insight 
 ruled out dark themes, high visual complexity, and anything that prioritized 
 aesthetics over clarity.`,
@@ -29,7 +30,7 @@ aesthetics over clarity.`,
 from design tokens and component library to every screen across the full operational surface.`,
 
     challenge: `Fleet managers relied on Excel files and disconnected tools with no 
-real-time visibility. The primary user is a 45+ year old, office-based, non-technical 
+real-time visibility. The primary user is a 40+ year old, office-based, non-technical 
 fleet manager spending 6–8 hours daily inside the dashboard — requiring clarity and 
 speed above everything.`,
 
@@ -37,7 +38,7 @@ speed above everything.`,
 design tokens, 60+ components, all states. Combined with progressive disclosure 
 patterns to handle complex workflows without overwhelming non-technical users.`,
 
-    team: ["1 PM", "1 PO", "2 Frontend Devs", "2 Backend Devs", "1 Designer (me)"],
+    team: ["1 PM", "1 PO", "2 Frontend Devs", "2 Backend Devs"],
 
     designChallenges: [
       {
@@ -113,12 +114,12 @@ being designed.`,
     tools: ["Figma", "FigJam", "Notion", "Maze", "Tailwind CSS", "shadcn/ui"],
 
     screens: [
-      { label: "Dashboard Overview" },
-      { label: "Vehicle Management" },
-      { label: "Bulk Import — Column Mapping" },
-      { label: "Bulk Import — Error Review" },
-      { label: "Roles & Permissions Matrix" },
-      { label: "Maintenance Tracking" },
+      { label: "Dashboard Overview", image: "dadycar-Dashboard" },
+      { label: "Vehicle Management", image: "dadycar-Vehicule" },
+      { label: "Bulk Import — Column Mapping", image: "dadycar-Bulk" },
+      { label: "Bulk Import — Error Review", image: "dadycar-Bulk-error" },
+      { label: "Roles & Permissions Matrix", image: "dadycar-Telamitc" },
+      { label: "Maintenance Tracking", image: "dadycar-Map" },
     ],
 
     stats: [
@@ -141,6 +142,7 @@ being designed.`,
     client: "FocusCare",
     year: "2023–2024",
     duration: "8 months",
+    heroImage: "focuseCare-Dashboard",
 
     context: `Pre-surgical workflows at hospitals are notoriously fragmented. 
 Paper forms, disconnected EHR systems, manual phone calls between departments, 
@@ -239,12 +241,12 @@ long haul — iterative improvements beat big-bang launches.`,
     tools: ["Figma", "Dovetail", "Miro", "UserTesting", "Tailwind CSS", "Radix UI"],
 
     screens: [
-      { label: "Clinical Dashboard" },
-      { label: "Patient Journey Flow" },
-      { label: "Pre-Op Checklist" },
-      { label: "Batch Patient Processing" },
-      { label: "Compliance Audit Log" },
-      { label: "Patient Communication Center" },
+      { label: "Clinical Dashboard", image: "focuscare-Dashboard" },
+      { label: "Patient Journey Flow", image: "focuscare-patient" },
+      { label: "Pre-Op Checklist", image: "focuscare-consultation" },
+      { label: "Batch Patient Processing", image: "focuscare-surgon" },
+      { label: "Compliance Audit Log", image: "focuscare-ficherliason" },
+      { label: "Patient Communication Center", image: "focuscare-consultation-fini" },
     ],
 
     stats: [
@@ -268,6 +270,7 @@ long haul — iterative improvements beat big-bang launches.`,
     client: "Shihany",
     year: "2023–2024",
     duration: "Full Cycle",
+    heroImage: "shihany-hub",
 
     context: `Youth sports clubs in Saudi Arabia are running on informal systems. 
 WhatsApp groups for scheduling, paper sheets for attendance, cash payments with 
@@ -411,12 +414,12 @@ The lesson is not about design — it is about the full journey from product to 
     tools: ["Figma", "FigJam", "Notion", "Tailwind CSS", "shadcn/ui", "React Native"],
 
     screens: [
-      { label: "Shihany Hub — Club Dashboard" },
-      { label: "Shihany Hub — Player Roster" },
-      { label: "Shihany Pro — Session View" },
-      { label: "Shihany Pro — QR Attendance Scan" },
-      { label: "Shihany App — Parent Home" },
-      { label: "Shihany Federation — League Overview" },
+      { label: "Shihany Hub — Club Dashboard", image: "shihany-hub" },
+      { label: "Shihany Hub — Player Roster", image: "shihany-hub-training" },
+      { label: "Shihany Pro — Session View", image: "shihany-pro" },
+      { label: "Shihany Pro — QR Attendance Scan", image: "shihany-player" },
+      { label: "Shihany App — Parent Home", image: "shihany-player" },
+      { label: "Shihany Federation — League Overview", image: "shihany-fed" },
     ],
 
     nextProject: {
@@ -434,6 +437,7 @@ The lesson is not about design — it is about the full journey from product to 
     client: "Resaglob",
     year: "2024–2025",
     duration: "In Development",
+    heroImage: "resaglob-Hotel Search",
 
     context: `Travel agencies in Algeria are sitting at the intersection of high 
 client expectations and outdated tooling. Their clients want fast, reliable hotel 
@@ -557,12 +561,12 @@ implementation terms. That constraint produced a cleaner product.`,
     tools: ["Figma", "FigJam", "Notion", "Tailwind CSS", "shadcn/ui"],
 
     screens: [
-      { label: "Hotel Search — Tabbed Search Bar" },
-      { label: "Search Results — Hotel List" },
-      { label: "Hotel Detail — Room Types" },
-      { label: "Guest Configuration Popover" },
-      { label: "Booking Form — Client Details" },
-      { label: "Booking Confirmation Screen" },
+      { label: "Hotel Search — Tabbed Search Bar", image: "resaglob-Hotel Search" },
+      { label: "Search Results — Hotel List", image: "resaglob-Clients" },
+      { label: "Hotel Detail — Room Types", image: "resaglob-Map" },
+      { label: "Guest Configuration Popover", image: "resaglob-reservation" },
+      { label: "Booking Form — Client Details", image: "resaglob-Resume" },
+      { label: "Booking Confirmation Screen", image: "resaglob-Hotel Search" },
     ],
 
     nextProject: {
