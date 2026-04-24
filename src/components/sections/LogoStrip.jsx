@@ -15,7 +15,7 @@ const logos = [
 ]
 
 export function LogoStrip() {
-  const duplicatedLogos = [...logos, ...logos]
+  const duplicatedLogos = [...logos, ...logos, ...logos]
 
   return (
     <section className="py-16 px-4 sm:px-6 border-y border-gray-100">
@@ -33,12 +33,12 @@ export function LogoStrip() {
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
-        className="overflow-hidden"
+        className="overflow-hidden max-w-7xl mx-auto px-4 sm:px-6"
       >
         <motion.div
-          animate={{ x: ["0%", "-50%"] }}
+          animate={{ x: ["0%", "-33.33%"] }}
           transition={{
-            duration: 18,
+            duration: 20,
             repeat: Infinity,
             ease: "linear",
           }}
@@ -55,7 +55,6 @@ export function LogoStrip() {
         </motion.div>
       </motion.div>
 
-     
     </section>
   )
 }

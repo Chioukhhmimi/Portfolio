@@ -19,7 +19,15 @@ export function Hero() {
     const interval = setInterval(() => {
       setRoleIndex((prev) => (prev + 1) % roles.length)
     }, 2500)
-    return () => clearInterval(interval)
+    
+    const timeout = setTimeout(() => {
+      setRoleIndex(1)
+    }, 1000)
+    
+    return () => {
+      clearInterval(interval)
+      clearTimeout(timeout)
+    }
   }, [])
 
   return (
