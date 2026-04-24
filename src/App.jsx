@@ -11,6 +11,10 @@ import { Projects } from "@/components/sections/Projects"
 import { Contact } from "@/components/sections/Contact"
 import ProjectSinglePage from "./pages/ProjectSinglePage"
 
+// Admin imports
+import { AdminLayout } from "./admin/layouts/AdminLayout"
+import { AdminDashboard, ProjectsList, ProjectForm, BlogList, BlogForm, MessagesList, MessageDetail } from "./admin/pages"
+
 function ScrollToTop() {
   const { pathname, hash } = useLocation()
   
@@ -51,6 +55,17 @@ function App() {
               </motion.main>
             } />
             <Route path="/projects/:id" element={<ProjectSinglePage />} />
+            
+            {/* Admin Routes */}
+            <Route path="/admin" element={<AdminLayout><AdminDashboard /></AdminLayout>} />
+            <Route path="/admin/projects" element={<AdminLayout><ProjectsList /></AdminLayout>} />
+            <Route path="/admin/projects/new" element={<AdminLayout><ProjectForm /></AdminLayout>} />
+            <Route path="/admin/projects/:id/edit" element={<AdminLayout><ProjectForm /></AdminLayout>} />
+            <Route path="/admin/blog" element={<AdminLayout><BlogList /></AdminLayout>} />
+            <Route path="/admin/blog/new" element={<AdminLayout><BlogForm /></AdminLayout>} />
+            <Route path="/admin/blog/:id/edit" element={<AdminLayout><BlogForm /></AdminLayout>} />
+            <Route path="/admin/messages" element={<AdminLayout><MessagesList /></AdminLayout>} />
+            <Route path="/admin/messages/:id" element={<AdminLayout><MessageDetail /></AdminLayout>} />
           </Routes>
         </AnimatePresence>
         <Footer />
