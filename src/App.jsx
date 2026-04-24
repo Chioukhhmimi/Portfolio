@@ -8,7 +8,6 @@ import { LogoStrip } from "@/components/sections/LogoStrip"
 import { About } from "@/components/sections/About"
 import { Blog } from "@/components/sections/Blog"
 import { Projects } from "@/components/sections/Projects"
-import { Experience } from "@/components/sections/Experience"
 import { Contact } from "@/components/sections/Contact"
 import ProjectSinglePage from "./pages/ProjectSinglePage"
 
@@ -48,7 +47,6 @@ function App() {
                 <LogoStrip />
                 <Projects />
                 <Blog />
-                <Experience />
                 <Contact />
               </motion.main>
             } />
