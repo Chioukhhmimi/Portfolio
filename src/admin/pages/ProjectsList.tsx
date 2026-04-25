@@ -1,26 +1,26 @@
 import * as React from "react"
 import { Link, useNavigate } from "react-router-dom"
-import { Plus, Pencil, Trash2, Archive, Eye } from "lucide-react"
-import { 
-  PageHeader, 
-  LoadingState, 
-  EmptyState, 
-  StatusBadge,
+import { Plus, Search, Filter } from "lucide-react"
+import {
+  PageHeader,
+  LoadingState,
+  EmptyState,
   SearchInput,
   SelectInput,
-  ToolbarActions,
-  ConfirmDialog
-} from "../components/ui"
-import { projectsService } from "../services"
-import { Project, ProjectStatus } from "../types"
-import { PROJECT_STATUS_OPTIONS } from "../constants"
+  ConfirmDialog,
+} from "@/admin/components/ui"
+import { ProjectsTable } from "@/admin/components/projects"
+import { projectsService } from "@/admin/services/projectsService"
+import { Project, ProjectStatus } from "@/admin/types/project"
+import { PROJECT_STATUS_OPTIONS } from "@/admin/constants"
+import { Button } from "@/components/ui/button"
 
 export function ProjectsList() {
   const navigate = useNavigate()
   const [projects, setProjects] = React.useState<Project[]>([])
   const [loading, setLoading] = React.useState(true)
   const [search, setSearch] = React.useState("")
-  const [statusFilter, setStatusFilter] = React.useState("")
+  const [statusFilter, setStatusFilter] = React.useState<ProjectStatus | "">("")
   const [deleteId, setDeleteId] = React.useState<string | null>(null)
 
   React.useEffect(() => {
@@ -41,10 +41,29 @@ export function ProjectsList() {
     }
   }
 
-  const filteredProjects = projects.filter(p => {
-    const matchesSearch = !search || 
+  const handleArchive = async (id: string) => {
+    await projectsService.archive(id)
+    await loadProjects()
+  }
+
+  const handleUnarchive = async (id: string) => {
+    await projectsService.update(id, { status: "draft" })
+    await loadProjects()
+  }
+
+  const handleDuplicate = async (id: string) => {
+    const duplicated = await projectsService.duplicate(id)
+    if (duplicated) {
+      navigate(`/admin/projects/${duplicated.id}/edit`)
+    }
+  }
+
+  const filteredProjects = projects.filter((p) => {
+    const matchesSearch =
+      !search ||
       p.title.toLowerCase().includes(search.toLowerCase()) ||
-      p.clientName.toLowerCase().includes(search.toLowerCase())
+      p.client.toLowerCase().includes(search.toLowerCase()) ||
+      p.tag.toLowerCase().includes(search.toLowerCase())
     const matchesStatus = !statusFilter || p.status === statusFilter
     return matchesSearch && matchesStatus
   })
@@ -52,9 +71,9 @@ export function ProjectsList() {
   if (loading) {
     return (
       <div>
-        <PageHeader 
-          title="Projects" 
-          description="Manage your case studies"
+        <PageHeader
+          title="Projects"
+          description="Manage portfolio case studies"
           action={{ label: "Add Project", href: "/admin/projects/new" }}
         />
         <LoadingState />
@@ -64,82 +83,52 @@ export function ProjectsList() {
 
   return (
     <div>
-      <PageHeader 
-        title="Projects" 
-        description="Manage your case studies"
+      <PageHeader
+        title="Projects"
+        description="Manage portfolio case studies"
         action={{ label: "Add Project", href: "/admin/projects/new" }}
       />
 
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-        <div className="p-4 border-b border-gray-200 flex items-center justify-between">
-          <SearchInput placeholder="Search projects..." value={search} onChange={setSearch} />
+        <div className="p-4 border-b border-gray-200 flex items-center justify-between gap-4">
+          <div className="flex-1 max-w-md">
+            <SearchInput
+              placeholder="Search projects..."
+              value={search}
+              onChange={setSearch}
+            />
+          </div>
           <SelectInput
             value={statusFilter}
-            onChange={setStatusFilter}
-            options={PROJECT_STATUS_OPTIONS as { label: string; value: string }[]}
+            onChange={(val) => setStatusFilter(val as ProjectStatus | "")}
+            options={PROJECT_STATUS_OPTIONS}
             placeholder="All Status"
           />
         </div>
 
         {filteredProjects.length === 0 ? (
-          <EmptyState 
+          <EmptyState
             title="No projects found"
-            description={search || statusFilter ? "Try adjusting your filters" : "Get started by creating your first project"}
-            action={!search && !statusFilter ? { label: "Add Project", href: "/admin/projects/new" } : undefined}
+            description={
+              search || statusFilter
+                ? "Try adjusting your filters"
+                : "Get started by creating your first project"
+            }
+            action={
+              !search && !statusFilter
+                ? { label: "Add Project", href: "/admin/projects/new" }
+                : undefined
+            }
           />
         ) : (
-          <table className="w-full">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-6 py-3">Project</th>
-                <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-6 py-3">Client</th>
-                <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-6 py-3">Status</th>
-                <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-6 py-3">Featured</th>
-                <th className="text-right text-xs font-medium text-gray-500 uppercase tracking-wider px-6 py-3">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200">
-              {filteredProjects.map((project) => (
-                <tr key={project.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4">
-                    <Link to={`/admin/projects/${project.id}/edit`} className="font-medium text-gray-900 hover:text-gray-600">
-                      {project.title}
-                    </Link>
-                    <p className="text-sm text-gray-500">{project.shortDescription.slice(0, 60)}...</p>
-                  </td>
-                  <td className="px-6 py-4 text-gray-500">{project.clientName}</td>
-                  <td className="px-6 py-4">
-                    <StatusBadge status={project.status} type="project" />
-                  </td>
-                  <td className="px-6 py-4">
-                    {project.featured ? (
-                      <span className="text-sm text-green-600">★ Featured</span>
-                    ) : (
-                      <span className="text-sm text-gray-400">—</span>
-                    )}
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center justify-end gap-2">
-                      <button
-                        onClick={() => navigate(`/admin/projects/${project.id}/edit`)}
-                        className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg"
-                        title="Edit"
-                      >
-                        <Pencil className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => setDeleteId(project.id)}
-                        className="p-2 text-gray-400 hover:text-red-600 hover:bg-gray-100 rounded-lg"
-                        title="Delete"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <ProjectsTable
+            projects={filteredProjects}
+            onEdit={(id) => navigate(`/admin/projects/${id}/edit`)}
+            onDuplicate={handleDuplicate}
+            onArchive={handleArchive}
+            onUnarchive={handleUnarchive}
+            onDelete={(id) => setDeleteId(id)}
+          />
         )}
       </div>
 

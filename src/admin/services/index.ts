@@ -1,67 +1,10 @@
-import { Project, BlogPost, Message, DashboardStats, ActivityItem } from '../types'
-import { mockProjects, mockBlogPosts, mockMessages, mockDashboardStats, mockActivity } from '../data/mockData'
+import { BlogPost, Message, DashboardStats, ActivityItem } from '../types'
+import { mockBlogPosts, mockMessages, mockDashboardStats, mockActivity } from '../data/mockData'
+import { projectsService } from '../services/projectsService'
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
-export const projectsService = {
-  async getAll(): Promise<Project[]> {
-    await delay(300)
-    return [...mockProjects]
-  },
-
-  async getById(id: string): Promise<Project | undefined> {
-    await delay(200)
-    return mockProjects.find(p => p.id === id)
-  },
-
-  async create(data: Partial<Project>): Promise<Project> {
-    await delay(400)
-    const newProject: Project = {
-      id: String(Date.now()),
-      title: data.title || 'Untitled Project',
-      slug: data.slug || 'untitled-project',
-      shortDescription: data.shortDescription || '',
-      clientName: data.clientName || '',
-      industry: data.industry || '',
-      role: data.role || '',
-      year: data.year || '',
-      status: data.status || 'draft',
-      featured: data.featured || false,
-      tags: data.tags || [],
-      order: data.order || mockProjects.length + 1,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    }
-    mockProjects.push(newProject)
-    return newProject
-  },
-
-  async update(id: string, data: Partial<Project>): Promise<Project | undefined> {
-    await delay(400)
-    const index = mockProjects.findIndex(p => p.id === id)
-    if (index === -1) return undefined
-    mockProjects[index] = { ...mockProjects[index], ...data, updatedAt: new Date().toISOString() }
-    return mockProjects[index]
-  },
-
-  async delete(id: string): Promise<boolean> {
-    await delay(300)
-    const index = mockProjects.findIndex(p => p.id === id)
-    if (index === -1) return false
-    mockProjects.splice(index, 1)
-    return true
-  },
-
-  async getStats() {
-    await delay(200)
-    return {
-      total: mockProjects.length,
-      published: mockProjects.filter(p => p.status === 'published').length,
-      draft: mockProjects.filter(p => p.status === 'draft').length,
-      archived: mockProjects.filter(p => p.status === 'archived').length,
-    }
-  }
-}
+export { projectsService }
 
 export const blogService = {
   async getAll(): Promise<BlogPost[]> {

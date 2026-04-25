@@ -1,31 +1,36 @@
 import * as React from "react"
 import { useNavigate, useParams } from "react-router-dom"
-import { useForm } from "react-hook-form"
+import { useForm, useFieldArray, FieldErrors } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { z } from "zod"
-import { Save, ArrowLeft, Loader2 } from "lucide-react"
-import { PageHeader, LoadingState } from "../components/ui"
-import { projectsService } from "../services"
-import { Project, ProjectStatus } from "../types"
-import { PROJECT_STATUS_OPTIONS, INDUSTRY_OPTIONS } from "../constants"
+import { Save, Loader2, FileText, Users, Layout, Lightbulb, Target, Wrench, Image, ArrowRight, Check } from "lucide-react"
+import { PageHeader, LoadingState } from "@/admin/components/ui"
+import { projectsService } from "@/admin/services/projectsService"
+import { Project } from "@/admin/types/project"
+import { projectSchema, ProjectFormValues, projectDefaultValues } from "@/admin/schemas/projectSchema"
+import { Button } from "@/components/ui/button"
+import { BasicInfoSection } from "@/admin/components/forms/project/BasicInfoSection"
+import { NarrativeSection } from "@/admin/components/forms/project/NarrativeSection"
+import { TeamSection } from "@/admin/components/forms/project/TeamSection"
+import { EcosystemSection } from "@/admin/components/forms/project/EcosystemSection"
+import { DesignChallengesSection } from "@/admin/components/forms/project/DesignChallengesSection"
+import { OutcomesSection } from "@/admin/components/forms/project/OutcomesSection"
+import { LearningsSection } from "@/admin/components/forms/project/LearningsSection"
+import { ToolsSection } from "@/admin/components/forms/project/ToolsSection"
+import { ScreensSection } from "@/admin/components/forms/project/ScreensSection"
+import { NextProjectSection } from "@/admin/components/forms/project/NextProjectSection"
 
-const projectSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  slug: z.string().min(1, "Slug is required"),
-  shortDescription: z.string().min(1, "Description is required"),
-  clientName: z.string().min(1, "Client name is required"),
-  industry: z.string().min(1, "Industry is required"),
-  role: z.string().min(1, "Role is required"),
-  year: z.string().min(1, "Year is required"),
-  status: z.enum(["draft", "published", "archived"]),
-  featured: z.boolean(),
-  order: z.number(),
-  seoTitle: z.string().optional(),
-  seoDescription: z.string().optional(),
-  tags: z.array(z.string()).optional(),
-})
-
-type ProjectFormData = z.infer<typeof projectSchema>
+const sections = [
+  { id: "basic", label: "Basic Info", icon: FileText },
+  { id: "narrative", label: "Narrative", icon: FileText },
+  { id: "team", label: "Team", icon: Users },
+  { id: "ecosystem", label: "Ecosystem", icon: Layout },
+  { id: "challenges", label: "Challenges", icon: Lightbulb },
+  { id: "outcomes", label: "Outcomes", icon: Target },
+  { id: "learnings", label: "Learnings", icon: Lightbulb },
+  { id: "tools", label: "Tools", icon: Wrench },
+  { id: "screens", label: "Screens", icon: Image },
+  { id: "next", label: "Next Project", icon: ArrowRight },
+]
 
 export function ProjectForm() {
   const navigate = useNavigate()
@@ -33,16 +38,27 @@ export function ProjectForm() {
   const isEditing = !!id
   const [loading, setLoading] = React.useState(isEditing)
   const [saving, setSaving] = React.useState(false)
+  const [activeSection, setActiveSection] = React.useState("basic")
+  const [toast, setToast] = React.useState<{ show: boolean; message: string }>({ show: false, message: "" })
 
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<ProjectFormData>({
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    formState: { errors },
+  } = useForm<ProjectFormValues>({
     resolver: zodResolver(projectSchema),
-    defaultValues: {
-      status: "draft",
-      featured: false,
-      order: 1,
-      tags: [],
-    },
+    defaultValues: projectDefaultValues,
   })
+
+  const teamFieldArray = useFieldArray({ control, name: "team" })
+  const ecosystemFieldArray = useFieldArray({ control, name: "ecosystem" })
+  const designChallengesFieldArray = useFieldArray({ control, name: "designChallenges" })
+  const outcomesFieldArray = useFieldArray({ control, name: "outcomes" })
+  const learningsFieldArray = useFieldArray({ control, name: "learnings" })
+  const toolsFieldArray = useFieldArray({ control, name: "tools" })
+  const screensFieldArray = useFieldArray({ control, name: "screens" })
 
   React.useEffect(() => {
     if (isEditing && id) {
@@ -54,33 +70,34 @@ export function ProjectForm() {
     const project = await projectsService.getById(projectId)
     if (project) {
       reset({
-        title: project.title,
-        slug: project.slug,
-        shortDescription: project.shortDescription,
-        clientName: project.clientName,
-        industry: project.industry,
-        role: project.role,
-        year: project.year,
-        status: project.status,
-        featured: project.featured,
-        order: project.order,
-        seoTitle: project.seoTitle,
-        seoDescription: project.seoDescription,
-        tags: project.tags,
+        ...project,
+        award: project.award || "",
+        ecosystem: project.ecosystem || [],
       })
     }
     setLoading(false)
   }
 
-  const onSubmit = async (data: ProjectFormData) => {
+  const showToast = (message: string) => {
+    setToast({ show: true, message })
+    setTimeout(() => setToast({ show: false, message: "" }), 3000)
+  }
+
+  const onSubmit = async (data: ProjectFormValues) => {
     setSaving(true)
     try {
-      if (isEditing && id) {
-        await projectsService.update(id, data)
-      } else {
-        await projectsService.create(data)
+      const payload = {
+        ...data,
+        award: data.award === "" ? null : data.award,
       }
-      navigate("/admin/projects")
+
+      if (isEditing && id) {
+        await projectsService.update(id, payload)
+        showToast("Project saved successfully!")
+      } else {
+        await projectsService.create(payload)
+        navigate("/admin/projects")
+      }
     } catch (error) {
       console.error("Error saving project:", error)
     } finally {
@@ -88,10 +105,57 @@ export function ProjectForm() {
     }
   }
 
+  const handleSaveDraft = handleSubmit(async (data) => {
+    setSaving(true)
+    try {
+      const payload = {
+        ...data,
+        status: "draft",
+        award: data.award === "" ? null : data.award,
+      }
+
+      if (isEditing && id) {
+        await projectsService.update(id, payload)
+        showToast("Saved as draft!")
+      } else {
+        await projectsService.create(payload)
+        navigate("/admin/projects")
+      }
+    } catch (error) {
+      console.error("Error saving draft:", error)
+    } finally {
+      setSaving(false)
+    }
+  })
+
+  const handlePublish = handleSubmit(async (data) => {
+    setSaving(true)
+    try {
+      const payload = {
+        ...data,
+        status: "published",
+        award: data.award === "" ? null : data.award,
+      }
+
+      if (isEditing && id) {
+        await projectsService.update(id, payload)
+        showToast("Published!")
+      } else {
+        const newProject = await projectsService.create(payload)
+        await projectsService.publish(newProject.id)
+        navigate("/admin/projects")
+      }
+    } catch (error) {
+      console.error("Error publishing:", error)
+    } finally {
+      setSaving(false)
+    }
+  })
+
   if (loading) {
     return (
       <div>
-        <PageHeader 
+        <PageHeader
           title={isEditing ? "Edit Project" : "New Project"}
           action={{ label: "Back to Projects", href: "/admin/projects" }}
         />
@@ -101,176 +165,113 @@ export function ProjectForm() {
   }
 
   return (
-    <div>
-      <PageHeader 
+    <div className="max-w-6xl mx-auto">
+      <PageHeader
         title={isEditing ? "Edit Project" : "New Project"}
         action={{ label: "Back to Projects", href: "/admin/projects" }}
       />
 
-      <form onSubmit={handleSubmit(onSubmit)} className="max-w-3xl">
-        <div className="bg-white rounded-xl border border-gray-200 p-6 space-y-6">
-          <div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Basic Information</h3>
-            <div className="grid grid-cols-1 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
-                <input
-                  {...register("title")}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                  placeholder="Project title"
-                />
-                {errors.title && (
-                  <p className="text-sm text-red-600 mt-1">{errors.title.message}</p>
-                )}
-              </div>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+          <div className="grid grid-cols-[240px_1fr] min-h-[600px]">
+            <aside className="border-r border-gray-200 bg-gray-50 p-4">
+              <nav className="space-y-1">
+                {sections.map((section) => {
+                  const Icon = section.icon
+                  return (
+                    <button
+                      key={section.id}
+                      type="button"
+                      onClick={() => setActiveSection(section.id)}
+                      className={`w-full flex items-center gap-2 px-3 py-2 text-sm rounded-lg transition-colors text-left ${
+                        activeSection === section.id
+                          ? "bg-gray-900 text-white"
+                          : "text-gray-600 hover:bg-gray-100"
+                      }`}
+                    >
+                      <Icon className="w-4 h-4" />
+                      {section.label}
+                    </button>
+                  )
+                })}
+              </nav>
+            </aside>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Slug</label>
-                <input
-                  {...register("slug")}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                  placeholder="project-slug"
-                />
-                {errors.slug && (
-                  <p className="text-sm text-red-600 mt-1">{errors.slug.message}</p>
-                )}
-              </div>
+            <div className="p-6">
+              {activeSection === "basic" && (
+                <div className="space-y-6">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Basic Information</h3>
+                  <BasicInfoSection register={register} errors={errors} isEditing={isEditing} />
+                </div>
+              )}
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Short Description</label>
-                <textarea
-                  {...register("shortDescription")}
-                  rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                  placeholder="Brief description of the project"
-                />
-                {errors.shortDescription && (
-                  <p className="text-sm text-red-600 mt-1">{errors.shortDescription.message}</p>
-                )}
-              </div>
-            </div>
-          </div>
+              {activeSection === "narrative" && (
+                <div className="space-y-6">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Narrative</h3>
+                  <NarrativeSection register={register} errors={errors} />
+                </div>
+              )}
 
-          <div className="border-t border-gray-200 pt-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Project Details</h3>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Client Name</label>
-                <input
-                  {...register("clientName")}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                  placeholder="Client or company name"
-                />
-                {errors.clientName && (
-                  <p className="text-sm text-red-600 mt-1">{errors.clientName.message}</p>
-                )}
-              </div>
+              {activeSection === "team" && (
+                <div className="space-y-6">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Team</h3>
+                  <TeamSection register={register} errors={errors} fieldArray={teamFieldArray} />
+                </div>
+              )}
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Industry</label>
-                <select
-                  {...register("industry")}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                >
-                  <option value="">Select industry</option>
-                  {INDUSTRY_OPTIONS.map((opt) => (
-                    <option key={opt.value} value={opt.value}>{opt.label}</option>
-                  ))}
-                </select>
-                {errors.industry && (
-                  <p className="text-sm text-red-600 mt-1">{errors.industry.message}</p>
-                )}
-              </div>
+              {activeSection === "ecosystem" && (
+                <div className="space-y-6">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Ecosystem</h3>
+                  <EcosystemSection register={register} errors={errors} fieldArray={ecosystemFieldArray} />
+                </div>
+              )}
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
-                <input
-                  {...register("role")}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                  placeholder="e.g., Product Designer"
-                />
-                {errors.role && (
-                  <p className="text-sm text-red-600 mt-1">{errors.role.message}</p>
-                )}
-              </div>
+              {activeSection === "challenges" && (
+                <div className="space-y-6">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Design Challenges</h3>
+                  <DesignChallengesSection register={register} errors={errors} fieldArray={designChallengesFieldArray} />
+                </div>
+              )}
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Year</label>
-                <input
-                  {...register("year")}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                  placeholder="e.g., 2024-2025"
-                />
-                {errors.year && (
-                  <p className="text-sm text-red-600 mt-1">{errors.year.message}</p>
-                )}
-              </div>
-            </div>
-          </div>
+              {activeSection === "outcomes" && (
+                <div className="space-y-6">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Outcomes</h3>
+                  <OutcomesSection register={register} errors={errors} fieldArray={outcomesFieldArray} />
+                </div>
+              )}
 
-          <div className="border-t border-gray-200 pt-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Status & Settings</h3>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                <select
-                  {...register("status")}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                >
-                  {PROJECT_STATUS_OPTIONS.map((opt) => (
-                    <option key={opt.value} value={opt.value}>{opt.label}</option>
-                  ))}
-                </select>
-              </div>
+              {activeSection === "learnings" && (
+                <div className="space-y-6">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Learnings</h3>
+                  <LearningsSection register={register} errors={errors} fieldArray={learningsFieldArray} />
+                </div>
+              )}
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Order</label>
-                <input
-                  type="number"
-                  {...register("order", { valueAsNumber: true })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                />
-              </div>
+              {activeSection === "tools" && (
+                <div className="space-y-6">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Tools</h3>
+                  <ToolsSection register={register} errors={errors} fieldArray={toolsFieldArray} />
+                </div>
+              )}
 
-              <div className="col-span-2">
-                <label className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    {...register("featured")}
-                    className="w-4 h-4 border-gray-300 rounded"
-                  />
-                  <span className="text-sm text-gray-700">Mark as featured project</span>
-                </label>
-              </div>
-            </div>
-          </div>
+              {activeSection === "screens" && (
+                <div className="space-y-6">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Screens</h3>
+                  <ScreensSection register={register} errors={errors} fieldArray={screensFieldArray} />
+                </div>
+              )}
 
-          <div className="border-t border-gray-200 pt-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">SEO</h3>
-            <div className="grid grid-cols-1 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">SEO Title</label>
-                <input
-                  {...register("seoTitle")}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                  placeholder="SEO optimized title"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">SEO Description</label>
-                <textarea
-                  {...register("seoDescription")}
-                  rows={2}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                  placeholder="SEO optimized description"
-                />
-              </div>
+              {activeSection === "next" && (
+                <div className="space-y-6">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Next Project</h3>
+                  <NextProjectSection register={register} errors={errors} />
+                </div>
+              )}
             </div>
           </div>
         </div>
 
-        <div className="flex items-center justify-end gap-3 mt-6">
+        <div className="flex items-center justify-between mt-6">
           <button
             type="button"
             onClick={() => navigate("/admin/projects")}
@@ -278,16 +279,25 @@ export function ProjectForm() {
           >
             Cancel
           </button>
-          <button
-            type="submit"
-            disabled={saving}
-            className="px-4 py-2 bg-gray-900 text-white font-medium rounded-lg hover:bg-gray-800 transition-colors disabled:opacity-50 flex items-center gap-2"
-          >
-            {saving && <Loader2 className="w-4 h-4 animate-spin" />}
-            {saving ? "Saving..." : "Save Project"}
-          </button>
+          <div className="flex items-center gap-3">
+            <Button type="button" variant="outline" onClick={handleSaveDraft} disabled={saving}>
+              {saving && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
+              Save Draft
+            </Button>
+            <Button type="button" onClick={handlePublish} disabled={saving}>
+              {saving && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
+              Publish
+            </Button>
+          </div>
         </div>
       </form>
+
+      {toast.show && (
+        <div className="fixed bottom-4 right-4 bg-green-600 text-white px-4 py-3 rounded-lg shadow-lg flex items-center gap-2">
+          <Check className="w-4 h-4" />
+          {toast.message}
+        </div>
+      )}
     </div>
   )
 }

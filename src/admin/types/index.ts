@@ -1,31 +1,9 @@
-export type ProjectStatus = 'draft' | 'published' | 'archived'
-export type BlogStatus = 'draft' | 'published' | 'archived'
-export type MessageStatus = 'unread' | 'read' | 'archived'
+export * from "./project"
+export type { Project } from "./project"
 
-export interface Project {
-  id: string
-  title: string
-  slug: string
-  shortDescription: string
-  clientName: string
-  industry: string
-  role: string
-  year: string
-  status: ProjectStatus
-  featured: boolean
-  heroImage?: string
-  screenshots?: string[]
-  context?: string
-  challenge?: string
-  solution?: string
-  outcomes?: string[]
-  tags?: string[]
-  order: number
-  seoTitle?: string
-  seoDescription?: string
-  createdAt: string
-  updatedAt: string
-}
+export type ProjectStatus = "draft" | "published" | "archived"
+export type BlogStatus = "draft" | "published" | "archived"
+export type MessageStatus = "unread" | "read" | "archived"
 
 export interface BlogPost {
   id: string
@@ -77,8 +55,8 @@ export interface DashboardStats {
 
 export interface ActivityItem {
   id: string
-  type: 'project' | 'blog' | 'message'
-  action: 'created' | 'updated' | 'deleted' | 'published' | 'archived'
+  type: "project" | "blog" | "message"
+  action: "created" | "updated" | "deleted" | "published" | "archived"
   title: string
   dateTime: string
 }
