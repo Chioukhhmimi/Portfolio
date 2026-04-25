@@ -1,3 +1,28 @@
+export const testimonials = [
+  {
+    id: "amine-yahia-cherif",
+    name: "Amine Yahia Cherif",
+    role: "CEO",
+    company: "DadyCar",
+    platform: "LinkedIn",
+    quote: `J'ai eu le plaisir de travailler avec Hmimi Chioukh depuis plus de 3 ans en tant que son manager direct, et je peux dire que c'est un UI/UX Designer exceptionnel.
+Hmimi se distingue par sa créativité, son sens du détail et sa capacité à transformer des idées complexes en interfaces simples, fluides et élégantes. Il a toujours su allier rigueur professionnelle et innovation, ce qui a fortement contribué à la qualité de nos produits.
+Au-delà de ses compétences techniques, j'ai particulièrement apprécier son esprit d'équipe, sa fiabilité et son engagement constant. Il a su gagner la confiance de tous nos collaborateurs et a toujours livré un travail de grande qualité dans les délais impartis.
+Je recommande vivement Hmimi pour tout projet ou toute entreprise cherchant un designer talentueux, impliqué et passionné.`,
+  },
+  {
+    id: "aziz-trabelsi",
+    name: "Aziz Trabelsi",
+    role: "CEO",
+    company: "Shihany",
+    platform: "LinkedIn",
+    quote: `I had the joy of working with Hmimi Chioukh for 3 years (2022–2025) at Shihany, and I can confidently say he was a huge asset to our team.
+Beyond his strong skills in building intuitive and well-thought-out designs — from MVP to final product — he also brought a great energy to the team.
+Always positive, collaborative, and fun to work with, Hmimi helped create a supportive atmosphere where creativity could thrive.
+Any team would be lucky to have him!`,
+  },
+];
+
 export const portfolio = {
   name: "Hmimi Chioukh",
   role: "Product Designer ",

@@ -7,6 +7,7 @@ import { Hero } from "@/components/sections/Hero"
 import { LogoStrip } from "@/components/sections/LogoStrip"
 import { About } from "@/components/sections/About"
 import { Blog } from "@/components/sections/Blog"
+import { Testimonials } from "@/components/sections/Testimonials"
 import { Projects } from "@/components/sections/Projects"
 import { Contact } from "@/components/sections/Contact"
 import ProjectSinglePage from "./pages/ProjectSinglePage"
@@ -51,6 +52,7 @@ function App() {
                 <LogoStrip />
                 <Projects />
                 <Blog />
+                <Testimonials />
                 <Contact />
               </motion.main>
               <Footer />
