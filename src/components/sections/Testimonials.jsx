@@ -28,6 +28,57 @@ const cardVariants = {
   }),
 }
 
+function TestimonialCard({ item, index }) {
+  const [expanded, setExpanded] = React.useState(false)
+  const paragraphs = item.quote.split("\n\n")
+  const isLong = paragraphs.length > 4
+  const displayParagraphs = expanded ? paragraphs : paragraphs.slice(0, 4)
+
+  return (
+    <motion.article
+      custom={index}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.15 }}
+      variants={cardVariants}
+      whileHover={{ y: -4 }}
+      transition={{ duration: 0.2 }}
+      className="bg-white rounded-2xl border border-gray-100 p-6 md:p-8 shadow-sm"
+    >
+      <div className="mb-6">
+        <QuoteIcon />
+      </div>
+
+      <div className="space-y-4 text-sm md:text-base text-gray-600 leading-relaxed">
+        {displayParagraphs.map((paragraph, idx) => (
+          <p key={idx}>{paragraph}</p>
+        ))}
+      </div>
+
+      {isLong && (
+        <button
+          onClick={() => setExpanded(!expanded)}
+          className="mt-4 text-sm font-medium text-gray-900 hover:text-gray-600 transition-colors"
+        >
+          {expanded ? "Show less" : "Read more"}
+        </button>
+      )}
+
+      <div className="mt-6 pt-6 border-t border-gray-100">
+        <p className="font-semibold text-gray-900">{item.name}</p>
+        <div className="flex items-center gap-2 mt-1">
+          <span className="text-sm text-gray-500">{item.role}</span>
+          <span className="text-gray-300">·</span>
+          <span className="text-sm text-gray-500">{item.company}</span>
+        </div>
+        <p className="text-xs text-blue-500 mt-2 font-medium">
+          {item.platform} Recommendation
+        </p>
+      </div>
+    </motion.article>
+  )
+}
+
 export function Testimonials() {
   return (
     <section id="testimonials" className="py-24 px-6 md:px-12 bg-gray-50/50">
@@ -48,39 +99,7 @@ export function Testimonials() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
           {testimonials.map((item, i) => (
-            <motion.article
-              key={item.id}
-              custom={i}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.15 }}
-              variants={cardVariants}
-              whileHover={{ y: -4 }}
-              transition={{ duration: 0.2 }}
-              className="bg-white rounded-2xl border border-gray-100 p-6 md:p-8 shadow-sm"
-            >
-              <div className="mb-6">
-                <QuoteIcon />
-              </div>
-
-              <div className="space-y-4 text-sm md:text-base text-gray-600 leading-relaxed">
-                {item.quote.split("\n\n").map((paragraph, idx) => (
-                  <p key={idx}>{paragraph}</p>
-                ))}
-              </div>
-
-              <div className="mt-8 pt-6 border-t border-gray-100">
-                <p className="font-semibold text-gray-900">{item.name}</p>
-                <div className="flex items-center gap-2 mt-1">
-                  <span className="text-sm text-gray-500">{item.role}</span>
-                  <span className="text-gray-300">·</span>
-                  <span className="text-sm text-gray-500">{item.company}</span>
-                </div>
-                <p className="text-xs text-blue-500 mt-2 font-medium">
-                  {item.platform} Recommendation
-                </p>
-              </div>
-            </motion.article>
+            <TestimonialCard key={item.id} item={item} index={i} />
           ))}
         </div>
       </div>
