@@ -5,14 +5,24 @@ import {
   createProject,
   updateProject,
   deleteProject,
+  archiveProject,
+  duplicateProject,
+  updateProjectStatus,
+  reorderProjects,
 } from '../controllers/projectsController.js';
+import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
 router.get('/', getAllProjects);
 router.get('/:id', getProjectById);
-router.post('/', createProject);
-router.put('/:id', updateProject);
-router.delete('/:id', deleteProject);
+
+router.post('/', protect, createProject);
+router.put('/:id', protect, updateProject);
+router.delete('/:id', protect, deleteProject);
+router.patch('/:id/archive', protect, archiveProject);
+router.patch('/:id/duplicate', protect, duplicateProject);
+router.patch('/:id/status', protect, updateProjectStatus);
+router.patch('/reorder', protect, reorderProjects);
 
 export default router;
