@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Save, Loader2, FileText, Users, Layout, Lightbulb, Target, Wrench, Image, ArrowRight, Check } from "lucide-react"
 import { PageHeader, LoadingState } from "@/admin/components/ui"
 import { projectsService } from "@/admin/services/projectsService"
-import { Project } from "@/admin/types/project"
+import { Project, ProjectFormData } from "@/admin/types/project"
 import { projectSchema, ProjectFormValues, projectDefaultValues } from "@/admin/schemas/projectSchema"
 import { Button } from "@/components/ui/button"
 import { BasicInfoSection } from "@/admin/components/forms/project/BasicInfoSection"
@@ -38,8 +38,13 @@ export function ProjectForm() {
   const isEditing = !!id
   const [loading, setLoading] = React.useState(isEditing)
   const [saving, setSaving] = React.useState(false)
+  const [error, setError] = React.useState<string | null>(null)
   const [activeSection, setActiveSection] = React.useState("basic")
-  const [toast, setToast] = React.useState<{ show: boolean; message: string }>({ show: false, message: "" })
+  const [toast, setToast] = React.useState<{ show: boolean; message: string; isError?: boolean }>({
+    show: false,
+    message: "",
+    isError: false,
+  })
 
   const {
     register,
@@ -67,24 +72,35 @@ export function ProjectForm() {
   }, [id])
 
   const loadProject = async (projectId: string) => {
-    const project = await projectsService.getById(projectId)
-    if (project) {
-      reset({
-        ...project,
-        award: project.award || "",
-        ecosystem: project.ecosystem || [],
-      })
+    setLoading(true)
+    setError(null)
+    try {
+      const response = await projectsService.getProjectById(projectId)
+      if (response.success && response.data) {
+        reset({
+          ...response.data,
+          award: response.data.award || "",
+          ecosystem: response.data.ecosystem || [],
+        })
+      } else {
+        setError("Project not found")
+      }
+    } catch (err) {
+      console.error("Error loading project:", err)
+      setError(err instanceof Error ? err.message : "Failed to load project")
+    } finally {
+      setLoading(false)
     }
-    setLoading(false)
   }
 
-  const showToast = (message: string) => {
-    setToast({ show: true, message })
-    setTimeout(() => setToast({ show: false, message: "" }), 3000)
+  const showToast = (message: string, isError = false) => {
+    setToast({ show: true, message, isError })
+    setTimeout(() => setToast({ show: false, message: "", isError: false }), 3000)
   }
 
   const onSubmit = async (data: ProjectFormValues) => {
     setSaving(true)
+    setError(null)
     try {
       const payload = {
         ...data,
@@ -92,14 +108,18 @@ export function ProjectForm() {
       }
 
       if (isEditing && id) {
-        await projectsService.update(id, payload)
+        await projectsService.updateProject(id, payload)
         showToast("Project saved successfully!")
       } else {
-        await projectsService.create(payload)
+        await projectsService.createProject(payload)
+        showToast("Project created successfully!")
         navigate("/admin/projects")
       }
-    } catch (error) {
-      console.error("Error saving project:", error)
+    } catch (err) {
+      console.error("Error saving project:", err)
+      const errorMessage = err instanceof Error ? err.message : "Failed to save project"
+      setError(errorMessage)
+      showToast(errorMessage, true)
     } finally {
       setSaving(false)
     }
@@ -107,6 +127,7 @@ export function ProjectForm() {
 
   const handleSaveDraft = handleSubmit(async (data) => {
     setSaving(true)
+    setError(null)
     try {
       const payload = {
         ...data,
@@ -115,14 +136,17 @@ export function ProjectForm() {
       }
 
       if (isEditing && id) {
-        await projectsService.update(id, payload)
+        await projectsService.updateProject(id, payload)
         showToast("Saved as draft!")
       } else {
-        await projectsService.create(payload)
+        await projectsService.createProject(payload)
         navigate("/admin/projects")
       }
-    } catch (error) {
-      console.error("Error saving draft:", error)
+    } catch (err) {
+      console.error("Error saving draft:", err)
+      const errorMessage = err instanceof Error ? err.message : "Failed to save draft"
+      setError(errorMessage)
+      showToast(errorMessage, true)
     } finally {
       setSaving(false)
     }
@@ -130,6 +154,7 @@ export function ProjectForm() {
 
   const handlePublish = handleSubmit(async (data) => {
     setSaving(true)
+    setError(null)
     try {
       const payload = {
         ...data,
@@ -138,15 +163,20 @@ export function ProjectForm() {
       }
 
       if (isEditing && id) {
-        await projectsService.update(id, payload)
+        await projectsService.updateProject(id, payload)
         showToast("Published!")
       } else {
-        const newProject = await projectsService.create(payload)
-        await projectsService.publish(newProject.id)
+        const response = await projectsService.createProject(payload)
+        if (response.success && response.data) {
+          await projectsService.updateProjectStatus(response.data.id, "published")
+        }
         navigate("/admin/projects")
       }
-    } catch (error) {
-      console.error("Error publishing:", error)
+    } catch (err) {
+      console.error("Error publishing:", err)
+      const errorMessage = err instanceof Error ? err.message : "Failed to publish"
+      setError(errorMessage)
+      showToast(errorMessage, true)
     } finally {
       setSaving(false)
     }
@@ -160,6 +190,22 @@ export function ProjectForm() {
           action={{ label: "Back to Projects", href: "/admin/projects" }}
         />
         <LoadingState />
+      </div>
+    )
+  }
+
+  if (error && isEditing && !loading) {
+    return (
+      <div>
+        <PageHeader
+          title={isEditing ? "Edit Project" : "New Project"}
+          action={{ label: "Back to Projects", href: "/admin/projects" }}
+        />
+        <div className="p-8 text-center">
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">Project Not Found</h2>
+          <p className="text-gray-500 mb-4">{error}</p>
+          <Button onClick={() => navigate("/admin/projects")}>Back to Projects</Button>
+        </div>
       </div>
     )
   }
@@ -293,7 +339,11 @@ export function ProjectForm() {
       </form>
 
       {toast.show && (
-        <div className="fixed bottom-4 right-4 bg-green-600 text-white px-4 py-3 rounded-lg shadow-lg flex items-center gap-2">
+        <div
+          className={`fixed bottom-4 right-4 text-white px-4 py-3 rounded-lg shadow-lg flex items-center gap-2 ${
+            toast.isError ? "bg-red-600" : "bg-green-600"
+          }`}
+        >
           <Check className="w-4 h-4" />
           {toast.message}
         </div>

@@ -19,54 +19,137 @@ export function ProjectsList() {
   const navigate = useNavigate()
   const [projects, setProjects] = React.useState<Project[]>([])
   const [loading, setLoading] = React.useState(true)
+  const [error, setError] = React.useState<string | null>(null)
   const [search, setSearch] = React.useState("")
   const [statusFilter, setStatusFilter] = React.useState<ProjectStatus | "">("")
   const [deleteId, setDeleteId] = React.useState<string | null>(null)
+  const [actionLoading, setActionLoading] = React.useState<string | null>(null)
+
+  const debouncedSearch = React.useRef<string>("")
+  const searchTimeoutRef = React.useRef<NodeJS.Timeout>()
 
   React.useEffect(() => {
     loadProjects()
   }, [])
 
+  React.useEffect(() => {
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current)
+    }
+    searchTimeoutRef.current = setTimeout(() => {
+      debouncedSearch.current = search
+      loadProjects()
+    }, 300)
+
+    return () => {
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current)
+      }
+    }
+  }, [search])
+
+  React.useEffect(() => {
+    loadProjects()
+  }, [statusFilter])
+
   const loadProjects = async () => {
-    const data = await projectsService.getAll()
-    setProjects(data)
-    setLoading(false)
+    setLoading(true)
+    setError(null)
+    try {
+      const filters: Parameters<typeof projectsService.getAllProjects>[0] = {
+        status: statusFilter || undefined,
+        search: debouncedSearch.current || undefined,
+      }
+      const response = await projectsService.getAllProjects(filters)
+      setProjects(response.data)
+    } catch (err) {
+      console.error("Error loading projects:", err)
+      setError(err instanceof Error ? err.message : "Failed to load projects")
+    } finally {
+      setLoading(false)
+    }
   }
 
   const handleDelete = async () => {
-    if (deleteId) {
-      await projectsService.delete(deleteId)
+    if (!deleteId) return
+    setActionLoading(deleteId)
+    try {
+      await projectsService.deleteProject(deleteId)
       await loadProjects()
+    } catch (err) {
+      console.error("Error deleting project:", err)
+      setError(err instanceof Error ? err.message : "Failed to delete project")
+    } finally {
       setDeleteId(null)
+      setActionLoading(null)
     }
   }
 
   const handleArchive = async (id: string) => {
-    await projectsService.archive(id)
-    await loadProjects()
-  }
-
-  const handleUnarchive = async (id: string) => {
-    await projectsService.update(id, { status: "draft" })
-    await loadProjects()
-  }
-
-  const handleDuplicate = async (id: string) => {
-    const duplicated = await projectsService.duplicate(id)
-    if (duplicated) {
-      navigate(`/admin/projects/${duplicated.id}/edit`)
+    setActionLoading(id)
+    try {
+      await projectsService.archiveProject(id)
+      await loadProjects()
+    } catch (err) {
+      console.error("Error archiving project:", err)
+      setError(err instanceof Error ? err.message : "Failed to archive project")
+    } finally {
+      setActionLoading(null)
     }
   }
 
-  const filteredProjects = projects.filter((p) => {
-    const matchesSearch =
-      !search ||
-      p.title.toLowerCase().includes(search.toLowerCase()) ||
-      p.client.toLowerCase().includes(search.toLowerCase()) ||
-      p.tag.toLowerCase().includes(search.toLowerCase())
-    const matchesStatus = !statusFilter || p.status === statusFilter
-    return matchesSearch && matchesStatus
-  })
+  const handleUnarchive = async (id: string) => {
+    setActionLoading(id)
+    try {
+      await projectsService.updateProjectStatus(id, "draft")
+      await loadProjects()
+    } catch (err) {
+      console.error("Error unarchiving project:", err)
+      setError(err instanceof Error ? err.message : "Failed to restore project")
+    } finally {
+      setActionLoading(null)
+    }
+  }
+
+  const handleDuplicate = async (id: string) => {
+    setActionLoading(id)
+    try {
+      const response = await projectsService.duplicateProject(id)
+      if (response.success && response.data) {
+        await loadProjects()
+        navigate(`/admin/projects/${response.data.id}/edit`)
+      }
+    } catch (err) {
+      console.error("Error duplicating project:", err)
+      setError(err instanceof Error ? err.message : "Failed to duplicate project")
+    } finally {
+      setActionLoading(null)
+    }
+  }
+
+  const handleStatusToggle = async (id: string, currentStatus: ProjectStatus) => {
+    const newStatus = currentStatus === "published" ? "draft" : "published"
+    setActionLoading(id)
+    try {
+      await projectsService.updateProjectStatus(id, newStatus)
+      await loadProjects()
+    } catch (err) {
+      console.error("Error updating status:", err)
+      setError(err instanceof Error ? err.message : "Failed to update status")
+    } finally {
+      setActionLoading(null)
+    }
+  }
+
+  const handleReorder = async (newOrder: { id: string; order: number }[]) => {
+    try {
+      await projectsService.reorderProjects(newOrder)
+      await loadProjects()
+    } catch (err) {
+      console.error("Error reordering projects:", err)
+      setError(err instanceof Error ? err.message : "Failed to reorder projects")
+    }
+  }
 
   if (loading) {
     return (
@@ -89,6 +172,15 @@ export function ProjectsList() {
         action={{ label: "Add Project", href: "/admin/projects/new" }}
       />
 
+      {error && (
+        <div className="mb-4 p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg">
+          {error}
+          <button onClick={() => setError(null)} className="ml-2 underline">
+            Dismiss
+          </button>
+        </div>
+      )}
+
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
         <div className="p-4 border-b border-gray-200 flex items-center justify-between gap-4">
           <div className="flex-1 max-w-md">
@@ -106,7 +198,7 @@ export function ProjectsList() {
           />
         </div>
 
-        {filteredProjects.length === 0 ? (
+        {projects.length === 0 ? (
           <EmptyState
             title="No projects found"
             description={
@@ -122,12 +214,13 @@ export function ProjectsList() {
           />
         ) : (
           <ProjectsTable
-            projects={filteredProjects}
+            projects={projects}
             onEdit={(id) => navigate(`/admin/projects/${id}/edit`)}
             onDuplicate={handleDuplicate}
             onArchive={handleArchive}
             onUnarchive={handleUnarchive}
             onDelete={(id) => setDeleteId(id)}
+            loadingId={actionLoading}
           />
         )}
       </div>

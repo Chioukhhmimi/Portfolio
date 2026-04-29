@@ -136,6 +136,15 @@ By combining product thinking, system design, and AI-powered workflows, I simpli
   },
   blogPosts: [
     {
+      id: 4,
+      title: "My AI Workflow as a Product Designer",
+      description: "Exploring how I leverage AI tools to accelerate research, iteration, QA, and execution while keeping product thinking at the center.",
+      tag: "AI · Product Design",
+      tagColor: "teal",
+      readTime: "5 min read",
+      url: "https://medium.com/@hmimichiouukh/my-ai-workflow-as-product-designer-b9baa93fb1d8",
+    },
+    {
       id: 1,
       title: "Improving Perceived Performance in Vehicle Monitoring",
       description: "How smart UX patterns can make fleet monitoring dashboards feel faster and more responsive without changing the underlying data.",
