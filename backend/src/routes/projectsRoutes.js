@@ -11,14 +11,15 @@ import {
   reorderProjects,
 } from '../controllers/projectsController.js';
 import { protect } from '../middleware/authMiddleware.js';
+import upload from '../middleware/upload.js';
 
 const router = express.Router();
 
 router.get('/', getAllProjects);
 router.get('/:id', getProjectById);
 
-router.post('/', protect, createProject);
-router.put('/:id', protect, updateProject);
+router.post('/', protect, upload.single('image'), createProject);
+router.put('/:id', protect, upload.single('image'), updateProject);
 router.delete('/:id', protect, deleteProject);
 router.patch('/:id/archive', protect, archiveProject);
 router.patch('/:id/duplicate', protect, duplicateProject);

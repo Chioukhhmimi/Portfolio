@@ -1,4 +1,36 @@
 import Project from '../models/Project.js';
+import cloudinary from '../lib/cloudinary.js';
+import { Readable } from 'stream';
+
+const uploadToCloudinary = async (fileBuffer) => {
+  return new Promise((resolve, reject) => {
+    if (!fileBuffer) {
+      resolve(null);
+      return;
+    }
+
+    const uploadStream = cloudinary.uploader.upload_stream(
+      {
+        folder: 'portfolio/projects',
+        resource_type: 'image',
+      },
+      (error, result) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(result.secure_url);
+        }
+      }
+    );
+
+    const readable = new Readable();
+    readable._read = () => {};
+    readable.push(fileBuffer);
+    readable.push(null);
+
+    readable.pipe(uploadStream);
+  });
+};
 
 /**
  * Get all projects
@@ -113,6 +145,12 @@ export const createProject = async (req, res, next) => {
       nextProject,
     } = req.body;
 
+    // Handle image upload
+    let imageUrl = heroImage || '';
+    if (req.file) {
+      imageUrl = await uploadToCloudinary(req.file.buffer);
+    }
+
     const errors = [];
 
     if (!id) errors.push('id is required');
@@ -165,7 +203,7 @@ export const createProject = async (req, res, next) => {
       outcomes,
       learnings,
       tools: tools || [],
-      heroImage,
+      heroImage: imageUrl,
       screens: screens || [],
       nextProject,
     });
@@ -189,6 +227,11 @@ export const updateProject = async (req, res, next) => {
   try {
     const { id } = req.params;
     const updateData = { ...req.body };
+
+    // Handle image upload
+    if (req.file) {
+      updateData.heroImage = await uploadToCloudinary(req.file.buffer);
+    }
 
     const project = await Project.findOne({ id });
 
