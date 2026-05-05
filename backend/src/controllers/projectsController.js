@@ -119,37 +119,6 @@ export const createProject = async (req, res, next) => {
     else if (!/^[a-z0-9-]+$/.test(id)) errors.push('id must be lowercase, slug-safe characters only');
 
     if (!title) errors.push('title is required');
-    else if (title.length < 3) errors.push('title must be at least 3 characters');
-
-    if (!tag) errors.push('tag is required');
-    if (!role) errors.push('role is required');
-    if (!client) errors.push('client is required');
-    if (!year) errors.push('year is required');
-
-    if (!overview) errors.push('overview is required');
-    else if (overview.length < 20) errors.push('overview must be at least 20 characters');
-
-    if (!challenge) errors.push('challenge is required');
-    else if (challenge.length < 20) errors.push('challenge must be at least 20 characters');
-
-    if (!solution) errors.push('solution is required');
-    else if (solution.length < 20) errors.push('solution must be at least 20 characters');
-
-    if (!designChallenges || !Array.isArray(designChallenges) || designChallenges.length < 1) {
-      errors.push('designChallenges is required with at least 1 item');
-    }
-
-    if (!outcomes || !Array.isArray(outcomes) || outcomes.length < 1) {
-      errors.push('outcomes is required with at least 1 item');
-    }
-
-    if (!learnings || !Array.isArray(learnings) || learnings.length < 1) {
-      errors.push('learnings is required with at least 1 item');
-    }
-
-    if (!nextProject?.title) errors.push('nextProject.title is required');
-    if (!nextProject?.url) errors.push('nextProject.url is required');
-    else if (!nextProject.url.startsWith('/')) errors.push('nextProject.url must start with /');
 
     if (errors.length > 0) {
       return res.status(400).json({

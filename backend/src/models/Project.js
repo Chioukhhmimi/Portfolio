@@ -70,7 +70,7 @@ const projectSchema = new mongoose.Schema({
     description: String,
   }],
   designChallenges: [{
-    number: Number,
+    number: String,
     title: String,
     problem: String,
     solution: String,
