@@ -9,7 +9,7 @@
       "https://res.cloudinary.com/dtwokbtvj/image/upload/v1778015518/portfolio/projects/dadycar/dadycar-Vehicule.svg"
     ]
   },
-  "focusecare": {
+  "focuscare": {
     "cover": "https://res.cloudinary.com/dtwokbtvj/image/upload/v1778015529/portfolio/projects/focusecare/FocuseCare-Dashboard.svg",
     "screens": [
       "https://res.cloudinary.com/dtwokbtvj/image/upload/v1778015533/portfolio/projects/focusecare/Focusecare-consultation-fini.svg",
@@ -19,7 +19,7 @@
       "https://res.cloudinary.com/dtwokbtvj/image/upload/v1778015551/portfolio/projects/focusecare/Focusecare-surgon.svg"
     ]
   },
-  "resglob": {
+  "resaglob": {
     "cover": "https://res.cloudinary.com/dtwokbtvj/image/upload/v1778015555/portfolio/projects/resglob/Resglob-Clients.svg",
     "screens": [
       "https://res.cloudinary.com/dtwokbtvj/image/upload/v1778015570/portfolio/projects/resglob/Resglob-Hotel%20Search.svg",
