@@ -1,31 +1,83 @@
 import * as React from "react"
 import { Link } from "react-router-dom"
 import { motion } from "framer-motion"
-import { ArrowUpRight } from "lucide-react"
+import { ArrowUpRight, Loader2 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { portfolio } from "@/data/portfolio"
-import { projectsData } from "@/data/projectsData"
-import DadycarSvg from "@/assets/Projects/dadycar.svg"
-import FocuseSvg from "@/assets/Projects/focuse.svg"
-import ShihanySvg from "@/assets/Projects/Shihany.svg"
-import ResglobSvg from "@/assets/Projects/resglob.svg"
-
-const projectImages = {
-  "DadyCar": DadycarSvg,
-  "FocusCare": FocuseSvg,
-  "Shihany": ShihanySvg,
-  "Resaglob": ResglobSvg,
-}
-
-const projectIdMap = {
-  "DadyCar": "dadycar",
-  "FocusCare": "focuscare",
-  "Shihany": "shihany",
-  "Resaglob": "resaglob",
-}
+import { fetchProjects } from "@/lib/api"
 
 export function Projects() {
+  const [projects, setProjects] = React.useState([])
+  const [loading, setLoading] = React.useState(true)
+  const [error, setError] = React.useState(null)
+
+  React.useEffect(() => {
+    const loadProjects = async () => {
+      try {
+        const data = await fetchProjects()
+        setProjects(data)
+      } catch (err) {
+        setError(err.message)
+      } finally {
+        setLoading(false)
+      }
+    }
+    loadProjects()
+  }, [])
+
+  if (loading) {
+    return (
+      <section id="projects" className="py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.6 }}
+            className="mb-16 text-center"
+          >
+            <p className="text-xs uppercase tracking-widest text-gray-400 mb-4">Selected Works</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900">Projects I worked on</h2>
+          </motion.div>
+          <div className="flex justify-center py-20">
+            <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  if (error) {
+    return (
+      <section id="projects" className="py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.6 }}
+            className="mb-16 text-center"
+          >
+            <p className="text-xs uppercase tracking-widest text-gray-400 mb-4">Selected Works</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900">Projects I worked on</h2>
+          </motion.div>
+          <div className="text-center py-20">
+            <p className="text-red-500">Failed to load projects: {error}</p>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  const getProjectCategory = (tag) => {
+    if (!tag) return "Project"
+    if (tag.toLowerCase().includes("fleet") || tag.toLowerCase().includes("saas")) return "Fleet Management"
+    if (tag.toLowerCase().includes("healthcare") || tag.toLowerCase().includes("clinical")) return "Healthcare"
+    if (tag.toLowerCase().includes("sports")) return "Sports"
+    if (tag.toLowerCase().includes("travel")) return "Travel"
+    return "Project"
+  }
+
   return (
     <section id="projects" className="py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -41,13 +93,12 @@ export function Projects() {
         </motion.div>
 
         <div className="space-y-24">
-          {portfolio.projects.map((project, index) => {
+          {projects.map((project, index) => {
             const isEven = index % 2 === 0
-            const projectImage = projectImages[project.title]
 
             return (
               <motion.div
-                key={project.title}
+                key={project.id}
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.2 }}
@@ -55,21 +106,26 @@ export function Projects() {
                 className={`flex flex-col ${isEven ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-8 lg:gap-16 items-center`}
               >
                 <div className="flex-1 w-full">
-                  <span className="text-xs uppercase tracking-widest text-gray-400">{project.category}</span>
+                  <span className="text-xs uppercase tracking-widest text-gray-400">{getProjectCategory(project.tag)}</span>
                   <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mt-2 mb-4">
                     {project.title}
                   </h3>
                   <p className="text-gray-500 leading-relaxed mb-6">
-                    {project.description}
+                    {project.overview}
                   </p>
                   <div className="flex flex-wrap gap-2 mb-6">
-                    {project.tags.map((tag) => (
-                      <Badge key={tag} variant="secondary" className="text-xs">
-                        {tag}
+                    {project.tag && (
+                      <Badge key={project.tag} variant="secondary" className="text-xs">
+                        {project.tag}
+                      </Badge>
+                    )}
+                    {project.tools?.slice(0, 2).map((tool) => (
+                      <Badge key={tool} variant="outline" className="text-xs">
+                        {tool}
                       </Badge>
                     ))}
                   </div>
-                  <Link to={`/projects/${projectIdMap[project.title] || 'dadycar'}`}>
+                  <Link to={`/projects/${project.id}`}>
                     <Button variant="ghost" size="sm" className="group flex items-center gap-1">
                       Check the project
                       <ArrowUpRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -78,16 +134,16 @@ export function Projects() {
                 </div>
 
                 <div className="flex-1 w-full rounded-2xl overflow-hidden bg-gray-50 border border-gray-200">
-                  {projectImage ? (
+                  {project.image ? (
                     <img 
-                      src={projectImage} 
+                      src={project.image} 
                       alt={project.title} 
-                      className="w-full h-auto object-cover "
+                      className="w-full h-auto object-cover"
                     />
                   ) : (
                     <div className="aspect-[4/3] flex items-center justify-center">
                       <span className="text-9xl font-bold text-gray-200">
-                        {project.title.charAt(0)}
+                        {project.title?.charAt(0)}
                       </span>
                     </div>
                   )}

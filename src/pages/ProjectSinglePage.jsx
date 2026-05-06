@@ -3,71 +3,9 @@ import { useNavigate, useParams } from "react-router-dom"
 import { motion } from "framer-motion"
 import { Navbar } from "@/components/layout/Navbar"
 import { Footer } from "@/components/layout/Footer"
-import { ArrowRight } from "lucide-react"
+import { ArrowRight, Loader2 } from "lucide-react"
 import { Link } from "react-router-dom"
-import { projectsData } from "@/data/projectsData"
-import DadycarDashboard from "@/assets/Projects/DadyCar/dadycar-Dashboard.svg"
-import DadycarVehicule from "@/assets/Projects/DadyCar/dadycar-Vehicule.svg"
-import DadycarBulk from "@/assets/Projects/DadyCar/dadycar-Bulk.svg"
-import DadycarBulkError from "@/assets/Projects/DadyCar/dadycar-Bulk-error.svg"
-import DadycarTelamitc from "@/assets/Projects/DadyCar/dadycar-Telamitc.svg"
-import DadycarMap from "@/assets/Projects/DadyCar/dadycar-Map.svg"
-import FocuseCareDashboard from "@/assets/Projects/FocuseCare/FocuseCare-Dashboard.svg"
-import FocuseCareConsultation from "@/assets/Projects/FocuseCare/Focusecare-consultation.svg"
-import FocuseCarePatient from "@/assets/Projects/FocuseCare/Focusecare-patient.svg"
-import FocuseCareSurgon from "@/assets/Projects/FocuseCare/Focusecare-surgon.svg"
-import FocuseCareFicherliason from "@/assets/Projects/FocuseCare/Focusecare-ficherliason.svg"
-import FocuseCareConsultationFini from "@/assets/Projects/FocuseCare/Focusecare-consultation-fini.svg"
-import ResglobHotelSearch from "@/assets/Projects/Resglob/Resglob-Hotel Search.svg"
-import ResglobClients from "@/assets/Projects/Resglob/Resglob-Clients.svg"
-import ResglobMap from "@/assets/Projects/Resglob/Resglob-Map.svg"
-import ResglobReservation from "@/assets/Projects/Resglob/Resglob-reservation.svg"
-import ResglobResume from "@/assets/Projects/Resglob/Resglob-Resume.svg"
-import ShihanyHub from "@/assets/Projects/Shihany/Shihany-hub.svg"
-import ShihanyHubTraining from "@/assets/Projects/Shihany/Shihany-hub-training.svg"
-import ShihanyPro from "@/assets/Projects/Shihany/Shihany-pro.svg"
-import ShihanyPlayer from "@/assets/Projects/Shihany/Shihany-player.svg"
-import ShihanyFed from "@/assets/Projects/Shihany/Shihany-Fed.svg"
-import ShihanyTeam from "@/assets/Projects/Shihany/Shihany-Team.svg"
-
-const dadycarImages = {
-  "dadycar-Dashboard": DadycarDashboard,
-  "dadycar-Vehicule": DadycarVehicule,
-  "dadycar-Bulk": DadycarBulk,
-  "dadycar-Bulk-error": DadycarBulkError,
-  "dadycar-Telamitc": DadycarTelamitc,
-  "dadycar-Map": DadycarMap,
-}
-
-const focuscareImages = {
-  "focuscare-Dashboard": FocuseCareDashboard,
-  "focuscare-consultation": FocuseCareConsultation,
-  "focuscare-patient": FocuseCarePatient,
-  "focuscare-surgon": FocuseCareSurgon,
-  "focuscare-ficherliason": FocuseCareFicherliason,
-  "focuscare-consultation-fini": FocuseCareConsultationFini,
-}
-
-const resaglobImages = {
-  "resaglob-Hotel Search": ResglobHotelSearch,
-  "resaglob-Clients": ResglobClients,
-  "resaglob-Map": ResglobMap,
-  "resaglob-reservation": ResglobReservation,
-  "resaglob-Resume": ResglobResume,
-}
-
-const shihanyImages = {
-  "shihany-hub": ShihanyHub,
-  "shihany-hub-training": ShihanyHubTraining,
-  "shihany-pro": ShihanyPro,
-  "shihany-player": ShihanyPlayer,
-  "shihany-fed": ShihanyFed,
-  "shihany-team": ShihanyTeam,
-}
-
-const getProjectImage = (imageKey) => {
-  return dadycarImages[imageKey] || focuscareImages[imageKey] || resaglobImages[imageKey] || shihanyImages[imageKey]
-}
+import { fetchProjectById } from "@/lib/api"
 
 const fadeUp = {
   initial: { opacity: 0, y: 30 },
@@ -86,14 +24,82 @@ const staggerStat = {
 export function ProjectSinglePage() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const [project, setProject] = React.useState(null)
+  const [loading, setLoading] = React.useState(true)
+  const [error, setError] = React.useState(null)
 
   React.useEffect(() => {
     window.scrollTo(0, 0)
   }, [id])
 
-  const project = React.useMemo(() => {
-    return projectsData.find((p) => p.id === id) || projectsData[0]
+  React.useEffect(() => {
+    const loadProject = async () => {
+      try {
+        setLoading(true)
+        const data = await fetchProjectById(id)
+        setProject(data)
+      } catch (err) {
+        setError(err.message)
+      } finally {
+        setLoading(false)
+      }
+    }
+    if (id) {
+      loadProject()
+    }
   }, [id])
+
+  if (loading) {
+    return (
+      <>
+        <Navbar />
+        <div className="min-h-screen bg-white flex items-center justify-center">
+          <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+        </div>
+        <Footer />
+      </>
+    )
+  }
+
+  if (error) {
+    return (
+      <>
+        <Navbar />
+        <div className="min-h-screen bg-white flex items-center justify-center">
+          <div className="text-center">
+            <p className="text-red-500 mb-4">Failed to load project: {error}</p>
+            <button 
+              onClick={() => navigate(-1)}
+              className="text-sm text-gray-500 hover:text-gray-900"
+            >
+              ← Go back
+            </button>
+          </div>
+        </div>
+        <Footer />
+      </>
+    )
+  }
+
+  if (!project) {
+    return (
+      <>
+        <Navbar />
+        <div className="min-h-screen bg-white flex items-center justify-center">
+          <div className="text-center">
+            <p className="text-gray-500 mb-4">Project not found</p>
+            <button 
+              onClick={() => navigate(-1)}
+              className="text-sm text-gray-500 hover:text-gray-900"
+            >
+              ← Go back
+            </button>
+          </div>
+        </div>
+        <Footer />
+      </>
+    )
+  }
 
   return (
     <>
@@ -171,9 +177,9 @@ export function ProjectSinglePage() {
             transition={{ duration: 0.5, delay: 0.35 }}
             className="w-full rounded-2xl bg-gray-100 aspect-video mt-10 overflow-hidden"
           >
-            {project.heroImage && getProjectImage(project.heroImage) ? (
+            {project.heroImage ? (
               <img 
-                src={getProjectImage(project.heroImage)} 
+                src={project.heroImage} 
                 alt={project.title} 
                 className="w-full h-auto"
               />
@@ -207,7 +213,7 @@ export function ProjectSinglePage() {
               {project.overview}
             </p>
             <div className="flex flex-wrap gap-2">
-              {project.team.map((role, index) => (
+              {project.team?.map((role, index) => (
                 <span key={index} className="bg-gray-100 text-gray-600 rounded-full text-xs px-3 py-1">
                   {role}
                 </span>
@@ -231,7 +237,7 @@ export function ProjectSinglePage() {
           </motion.div>
         )}
 
-        {project.ecosystem && (
+        {project.ecosystem && project.ecosystem.length > 0 && (
           <motion.div
             {...fadeUp}
             className="max-w-5xl mx-auto px-6 md:px-12 py-16 border-t border-gray-100"
@@ -257,7 +263,7 @@ export function ProjectSinglePage() {
                       {product.name}
                     </h3>
                     <span className="text-xs bg-white border border-gray-200 
-              text-gray-500 rounded-full px-3 py-1">
+               text-gray-500 rounded-full px-3 py-1">
                       {product.type}
                     </span>
                   </div>
@@ -293,7 +299,7 @@ export function ProjectSinglePage() {
           </div>
         </motion.div>
 
-        {project.stats && (
+        {project.stats && project.stats.length > 0 && (
           <motion.div
             {...fadeUp}
             className="max-w-5xl mx-auto px-6 md:px-12 py-16 border-t border-gray-100"
@@ -400,9 +406,9 @@ export function ProjectSinglePage() {
                   key={index}
                   className="rounded-2xl bg-gray-100 overflow-hidden"
                 >
-                  {screen.image && getProjectImage(screen.image) ? (
+                  {screen.src ? (
                     <img 
-                      src={getProjectImage(screen.image)} 
+                      src={screen.src} 
                       alt={screen.label} 
                       className="w-full h-auto"
                     />
@@ -486,7 +492,7 @@ export function ProjectSinglePage() {
             <p className="text-xs uppercase tracking-widest text-gray-400 mb-4">Next Project</p>
             <h2 className="text-3xl font-bold text-gray-900 mt-2">{project.nextProject.title}</h2>
             <Link
-              to={`/projects/${project.nextProject.id}`}
+              to={project.nextProject.url || `/projects/${id}`}
               className="inline-flex items-center gap-2 bg-gray-900 text-white rounded-full px-6 py-3 text-sm font-medium hover:bg-gray-800 transition-colors mt-6"
             >
               View Project <ArrowRight className="h-4 w-4" />
