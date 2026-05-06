@@ -2,7 +2,7 @@ import * as React from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { useForm, useFieldArray, FieldErrors } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Save, Loader2, FileText, Users, Layout, Lightbulb, Target, Wrench, Image, ArrowRight, Check } from "lucide-react"
+import { Save, Loader2, FileText, Users, Layout, Lightbulb, Target, Wrench, Image, ArrowRight, Check, Upload, X } from "lucide-react"
 import { PageHeader, LoadingState } from "@/admin/components/ui"
 import { projectsService } from "@/admin/services/projectsService"
 import { Project, ProjectFormData } from "@/admin/types/project"
@@ -45,6 +45,8 @@ export function ProjectForm() {
     message: "",
     isError: false,
   })
+  const [imageFile, setImageFile] = React.useState<File | null>(null)
+  const [imagePreview, setImagePreview] = React.useState<string>("")
 
   const {
     register,
@@ -102,16 +104,28 @@ export function ProjectForm() {
     setSaving(true)
     setError(null)
     try {
-      const payload = {
-        ...data,
-        award: data.award === "" ? null : data.award,
+      const formData = new FormData()
+      Object.entries(data).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          if (Array.isArray(value)) {
+            formData.append(key, JSON.stringify(value))
+          } else if (key === "award") {
+            formData.append(key, value === "" ? "" : value)
+          } else {
+            formData.append(key, String(value))
+          }
+        }
+      })
+
+      if (imageFile) {
+        formData.append("image", imageFile)
       }
 
       if (isEditing && id) {
-        await projectsService.updateProject(id, payload)
+        await projectsService.updateProject(id, formData)
         showToast("Project saved successfully!")
       } else {
-        await projectsService.createProject(payload)
+        await projectsService.createProject(formData)
         showToast("Project created successfully!")
         navigate("/admin/projects")
       }
@@ -129,17 +143,29 @@ export function ProjectForm() {
     setSaving(true)
     setError(null)
     try {
-      const payload = {
-        ...data,
-        status: "draft",
-        award: data.award === "" ? null : data.award,
+      const formData = new FormData()
+      formData.append("status", "draft")
+      Object.entries(data).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          if (Array.isArray(value)) {
+            formData.append(key, JSON.stringify(value))
+          } else if (key === "award") {
+            formData.append(key, value === "" ? "" : value)
+          } else {
+            formData.append(key, String(value))
+          }
+        }
+      })
+
+      if (imageFile) {
+        formData.append("image", imageFile)
       }
 
       if (isEditing && id) {
-        await projectsService.updateProject(id, payload)
+        await projectsService.updateProject(id, formData)
         showToast("Saved as draft!")
       } else {
-        await projectsService.createProject(payload)
+        await projectsService.createProject(formData)
         navigate("/admin/projects")
       }
     } catch (err) {
@@ -247,7 +273,7 @@ export function ProjectForm() {
               {activeSection === "basic" && (
                 <div className="space-y-6">
                   <h3 className="text-lg font-semibold text-gray-900 mb-4">Basic Information</h3>
-                  <BasicInfoSection register={register} errors={errors} isEditing={isEditing} />
+                  <BasicInfoSection register={register} errors={errors} isEditing={isEditing} imageFile={imageFile} setImageFile={setImageFile} imagePreview={imagePreview} setImagePreview={setImagePreview} />
                 </div>
               )}
 

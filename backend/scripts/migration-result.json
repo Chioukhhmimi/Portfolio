@@ -1,0 +1,41 @@
+{
+  "dadycar": {
+    "cover": "https://res.cloudinary.com/dtwokbtvj/image/upload/v1778015485/portfolio/projects/dadycar/dadycar-Bulk-error.svg",
+    "screens": [
+      "https://res.cloudinary.com/dtwokbtvj/image/upload/v1778015489/portfolio/projects/dadycar/dadycar-Bulk.svg",
+      "https://res.cloudinary.com/dtwokbtvj/image/upload/v1778015493/portfolio/projects/dadycar/dadycar-Dashboard.svg",
+      "https://res.cloudinary.com/dtwokbtvj/image/upload/v1778015499/portfolio/projects/dadycar/dadycar-Map.svg",
+      "https://res.cloudinary.com/dtwokbtvj/image/upload/v1778015504/portfolio/projects/dadycar/dadycar-Telamitc.svg",
+      "https://res.cloudinary.com/dtwokbtvj/image/upload/v1778015518/portfolio/projects/dadycar/dadycar-Vehicule.svg"
+    ]
+  },
+  "focusecare": {
+    "cover": "https://res.cloudinary.com/dtwokbtvj/image/upload/v1778015529/portfolio/projects/focusecare/FocuseCare-Dashboard.svg",
+    "screens": [
+      "https://res.cloudinary.com/dtwokbtvj/image/upload/v1778015533/portfolio/projects/focusecare/Focusecare-consultation-fini.svg",
+      "https://res.cloudinary.com/dtwokbtvj/image/upload/v1778015539/portfolio/projects/focusecare/Focusecare-consultation.svg",
+      "https://res.cloudinary.com/dtwokbtvj/image/upload/v1778015543/portfolio/projects/focusecare/Focusecare-ficherliason.svg",
+      "https://res.cloudinary.com/dtwokbtvj/image/upload/v1778015547/portfolio/projects/focusecare/Focusecare-patient.svg",
+      "https://res.cloudinary.com/dtwokbtvj/image/upload/v1778015551/portfolio/projects/focusecare/Focusecare-surgon.svg"
+    ]
+  },
+  "resglob": {
+    "cover": "https://res.cloudinary.com/dtwokbtvj/image/upload/v1778015555/portfolio/projects/resglob/Resglob-Clients.svg",
+    "screens": [
+      "https://res.cloudinary.com/dtwokbtvj/image/upload/v1778015570/portfolio/projects/resglob/Resglob-Hotel%20Search.svg",
+      "https://res.cloudinary.com/dtwokbtvj/image/upload/v1778015578/portfolio/projects/resglob/Resglob-Map.svg",
+      "https://res.cloudinary.com/dtwokbtvj/image/upload/v1778015581/portfolio/projects/resglob/Resglob-Resume.svg",
+      "https://res.cloudinary.com/dtwokbtvj/image/upload/v1778015585/portfolio/projects/resglob/Resglob-reservation.svg"
+    ]
+  },
+  "shihany": {
+    "cover": "https://res.cloudinary.com/dtwokbtvj/image/upload/v1778015589/portfolio/projects/shihany/Shihany-Fed.svg",
+    "screens": [
+      "https://res.cloudinary.com/dtwokbtvj/image/upload/v1778015592/portfolio/projects/shihany/Shihany-Team.svg",
+      "https://res.cloudinary.com/dtwokbtvj/image/upload/v1778015597/portfolio/projects/shihany/Shihany-hub-training.svg",
+      "https://res.cloudinary.com/dtwokbtvj/image/upload/v1778015600/portfolio/projects/shihany/Shihany-hub.svg",
+      "https://res.cloudinary.com/dtwokbtvj/image/upload/v1778015603/portfolio/projects/shihany/Shihany-player.svg",
+      "https://res.cloudinary.com/dtwokbtvj/image/upload/v1778015605/portfolio/projects/shihany/Shihany-pro.svg"
+    ]
+  }
+}

@@ -3,11 +3,16 @@ import { UseFormRegister, FieldErrors } from "react-hook-form"
 import { ProjectFormValues } from "../../schemas/projectSchema"
 import { TAG_COLOR_OPTIONS } from "@/admin/constants"
 import { cn } from "@/lib/utils"
+import { Upload, X } from "lucide-react"
 
 interface BasicInfoSectionProps {
   register: UseFormRegister<ProjectFormValues>
   errors: FieldErrors<ProjectFormValues>
   isEditing?: boolean
+  imageFile?: File | null
+  setImageFile?: (file: File | null) => void
+  imagePreview?: string
+  setImagePreview?: (url: string) => void
 }
 
 const colorClasses: Record<string, string> = {
@@ -22,7 +27,20 @@ const colorClasses: Record<string, string> = {
   yellow: "bg-yellow-500",
 }
 
-export function BasicInfoSection({ register, errors, isEditing }: BasicInfoSectionProps) {
+export function BasicInfoSection({ register, errors, isEditing, imageFile, setImageFile, imagePreview, setImagePreview }: BasicInfoSectionProps) {
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      setImageFile?.(file)
+      setImagePreview?.(URL.createObjectURL(file))
+    }
+  }
+
+  const removeImage = () => {
+    setImageFile?.(null)
+    setImagePreview?.("")
+  }
+
   return (
     <div className="space-y-6">
       <div>
@@ -52,6 +70,38 @@ export function BasicInfoSection({ register, errors, isEditing }: BasicInfoSecti
           placeholder="Project title"
         />
         {errors.title && <p className="text-sm text-red-600 mt-1">{errors.title.message}</p>}
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Hero Image</label>
+        {imagePreview ? (
+          <div className="relative inline-block">
+            <img
+              src={imagePreview}
+              alt="Preview"
+              className="w-full max-w-xs h-48 object-cover rounded-lg border border-gray-200"
+            />
+            <button
+              type="button"
+              onClick={removeImage}
+              className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        ) : (
+          <label className="flex flex-col items-center justify-center w-full max-w-xs h-48 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-gray-400 transition-colors">
+            <Upload className="w-8 h-8 text-gray-400 mb-2" />
+            <span className="text-sm text-gray-500">Click to upload image</span>
+            <span className="text-xs text-gray-400 mt-1">PNG, JPG up to 10MB</span>
+            <input
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleImageChange}
+            />
+          </label>
+        )}
       </div>
 
       <div className="grid grid-cols-2 gap-4">

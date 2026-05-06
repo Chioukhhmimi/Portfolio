@@ -38,13 +38,13 @@ export const projectsService = {
     return response
   },
 
-  async createProject(data: ProjectFormData): Promise<{ success: boolean; data: Project }> {
-    const response = await api.post("/projects", data) as ApiResponse<Project>
+  async createProject(formData: FormData): Promise<{ success: boolean; data: Project }> {
+    const response = await api.postFormData("/projects", formData) as ApiResponse<Project>
     return { success: true, data: response.data as Project }
   },
 
-  async updateProject(id: string, data: Partial<ProjectFormData>): Promise<{ success: boolean; data: Project }> {
-    const response = await api.put(`/projects/${id}`, data) as ApiResponse<Project>
+  async updateProject(id: string, formData: FormData): Promise<{ success: boolean; data: Project }> {
+    const response = await api.putFormData(`/projects/${id}`, formData) as ApiResponse<Project>
     return { success: true, data: response.data as Project }
   },
 

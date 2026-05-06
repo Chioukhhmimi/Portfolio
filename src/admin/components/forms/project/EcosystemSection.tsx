@@ -1,5 +1,5 @@
 import React from "react"
-import { UseFormRegister, FieldErrors, UseFieldArrayAppend, UseFieldArrayRemove, useWatch } from "react-hook-form"
+import { UseFormRegister, FieldErrors, UseFieldArrayAppend, UseFieldArrayRemove } from "react-hook-form"
 import { ProjectFormValues } from "../../schemas/projectSchema"
 import { X, Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -16,7 +16,6 @@ interface EcosystemSectionProps {
 
 export function EcosystemSection({ register, errors, fieldArray }: EcosystemSectionProps) {
   const { append, remove, fields } = fieldArray
-  const ecosystemValues = useWatch({ name: "ecosystem" }) as ProjectFormValues["ecosystem"]
 
   return (
     <div className="space-y-4">

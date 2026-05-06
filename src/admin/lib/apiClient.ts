@@ -10,9 +10,11 @@ const handleUnauthorized = () => {
 const handleRequest = async (url: string, options: RequestInit = {}) => {
   const token = getToken()
 
+  const isFormData = options.body instanceof FormData
+
   const headers: Record<string, string> = {
-    "Content-Type": "application/json",
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    ...(isFormData ? {} : { "Content-Type": "application/json" }),
     ...options.headers as Record<string, string>,
   }
 
@@ -57,4 +59,16 @@ export const api = {
     }),
 
   delete: (url: string) => handleRequest(url, { method: "DELETE" }),
+
+  postFormData: (url: string, formData: FormData) =>
+    handleRequest(url, {
+      method: "POST",
+      body: formData,
+    }),
+
+  putFormData: (url: string, formData: FormData) =>
+    handleRequest(url, {
+      method: "PUT",
+      body: formData,
+    }),
 }

@@ -1,33 +1,33 @@
 import { z } from "zod"
 
 const ecosystemItemSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  type: z.string().min(1, "Type is required"),
-  user: z.string().min(1, "User is required"),
-  description: z.string().min(1, "Description is required"),
+  name: z.string(),
+  type: z.string(),
+  user: z.string(),
+  description: z.string(),
 })
 
 const designChallengeSchema = z.object({
-  number: z.string().min(1, "Number is required"),
-  title: z.string().min(1, "Title is required"),
-  problem: z.string().min(1, "Problem is required"),
-  solution: z.string().min(1, "Solution is required"),
-  insight: z.string().min(1, "Insight is required"),
+  number: z.string(),
+  title: z.string(),
+  problem: z.string(),
+  solution: z.string(),
+  insight: z.string(),
 })
 
 const learningSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  body: z.string().min(1, "Body is required"),
+  title: z.string(),
+  body: z.string(),
 })
 
 const screenSchema = z.object({
-  label: z.string().min(1, "Label is required"),
-  src: z.string().min(1, "Image path is required"),
+  label: z.string(),
+  src: z.string(),
 })
 
 const nextProjectSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  url: z.string().min(1, "URL is required"),
+  title: z.string(),
+  url: z.string(),
 })
 
 export const projectSchema = z.object({
@@ -39,41 +39,41 @@ export const projectSchema = z.object({
 
   order: z.number().int().min(0),
 
-  tag: z.string().min(1, "Tag is required"),
+  tag: z.string(),
 
-  tagColor: z.string().min(1, "Tag color is required"),
+  tagColor: z.string(),
 
   award: z.string().nullable(),
 
   title: z.string().min(1, "Title is required"),
 
-  role: z.string().min(1, "Role is required"),
+  role: z.string(),
 
-  client: z.string().min(1, "Client is required"),
+  client: z.string(),
 
-  year: z.string().min(1, "Year is required"),
+  year: z.string(),
 
-  duration: z.string().min(1, "Duration is required"),
+  duration: z.string(),
 
-  context: z.string().min(1, "Context is required"),
+  context: z.string(),
 
-  userInsight: z.string().min(1, "User insight is required"),
+  userInsight: z.string(),
 
-  overview: z.string().min(1, "Overview is required"),
+  overview: z.string(),
 
-  challenge: z.string().min(1, "Challenge is required"),
+  challenge: z.string(),
 
-  solution: z.string().min(1, "Solution is required"),
+  solution: z.string(),
 
-  team: z.array(z.string()).min(1, "At least one team member is required"),
+  team: z.array(z.string()),
 
-  ecosystem: z.array(ecosystemItemSchema).optional(),
+  ecosystem: z.array(ecosystemItemSchema),
 
-  designChallenges: z.array(designChallengeSchema).min(1, "At least one design challenge is required"),
+  designChallenges: z.array(designChallengeSchema),
 
-  outcomes: z.array(z.string()).min(1, "At least one outcome is required"),
+  outcomes: z.array(z.string()),
 
-  learnings: z.array(learningSchema).min(1, "At least one learning is required"),
+  learnings: z.array(learningSchema),
 
   tools: z.array(z.string()),
 
