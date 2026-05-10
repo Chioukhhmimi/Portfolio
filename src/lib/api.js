@@ -22,3 +22,14 @@ export const fetchProjectById = async (id) => {
   const data = await response.json()
   return data.data
 }
+
+export const fetchClients = async () => {
+  const response = await fetch(`${baseURL}/clients`)
+  
+  if (!response.ok) {
+    throw new Error("Failed to fetch clients")
+  }
+  
+  const data = await response.json()
+  return data.data
+}

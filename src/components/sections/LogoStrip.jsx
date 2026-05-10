@@ -1,26 +1,33 @@
 import * as React from "react"
 import { motion } from "framer-motion"
-import ShihanySvg from "../../assets/logos/shihany.svg"
-import DadycarSvg from "../../assets/logos/dadycar.svg"
-import ResaglobSvg from "../../assets/logos/Resoglob.svg"
-import FocusSvg from "../../assets/logos/FocuseCare.svg"
-import TwirexSvg from "../../assets/logos/Twirex.svg"
-import ADOCSvg from "../../assets/logos/ADOC.svg"
-
-const logos = [
-  { name: "Twirex", src: TwirexSvg },
-  { name: "Shihany", src: ShihanySvg },
-  { name: "Dadycar", src: DadycarSvg },
-  { name: "Resaglob", src: ResaglobSvg },
-  { name: "FocusCare", src: FocusSvg },
-  { name: "ADOC", src: ADOCSvg },
-]
+import { fetchClients } from "@/lib/api"
 
 export function LogoStrip() {
-  const duplicatedLogos = [...logos, ...logos, ...logos]
+  const [clients, setClients] = React.useState([])
+  const [loading, setLoading] = React.useState(true)
+
+  React.useEffect(() => {
+    const loadClients = async () => {
+      try {
+        const data = await fetchClients()
+        setClients(data)
+      } catch (err) {
+        console.error('Failed to load clients:', err)
+      } finally {
+        setLoading(false)
+      }
+    }
+    loadClients()
+  }, [])
+
+  if (loading || clients.length === 0) {
+    return null
+  }
+
+  const duplicatedLogos = [...clients, ...clients, ...clients]
 
   return (
-<section className="py-16 border-y border-gray-100">
+    <section className="py-16 border-y border-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <motion.p
           initial={{ opacity: 0 }}
@@ -47,12 +54,12 @@ export function LogoStrip() {
             }}
             className="flex gap-16 items-center whitespace-nowrap"
           >
-            {duplicatedLogos.map((logo, index) => (
+            {duplicatedLogos.map((client, index) => (
               <img
-                key={`${logo.name}-${index}`}
-                src={logo.src}
-                alt={logo.name}
-                className="h-8 w-auto object-contain  opacity-80 hover:opacity-100 transition-opacity"
+                key={`${client.id}-${index}`}
+                src={client.logo}
+                alt={client.name}
+                className="h-8 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity"
               />
             ))}
           </motion.div>
