@@ -69,15 +69,6 @@ export function Projects() {
     )
   }
 
-  const getProjectCategory = (tag) => {
-    if (!tag) return "Project"
-    if (tag.toLowerCase().includes("fleet") || tag.toLowerCase().includes("saas")) return "Fleet Management"
-    if (tag.toLowerCase().includes("healthcare") || tag.toLowerCase().includes("clinical")) return "Healthcare"
-    if (tag.toLowerCase().includes("sports")) return "Sports"
-    if (tag.toLowerCase().includes("travel")) return "Travel"
-    return "Project"
-  }
-
   return (
     <section id="projects" className="py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -106,22 +97,17 @@ export function Projects() {
                 className={`flex flex-col ${isEven ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-8 lg:gap-16 items-center`}
               >
                 <div className="flex-1 w-full">
-                  <span className="text-xs uppercase tracking-widest text-gray-400">{getProjectCategory(project.tag)}</span>
+                  <span className="text-xs uppercase tracking-widest text-gray-400">{project.category}</span>
                   <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mt-2 mb-4">
                     {project.title}
                   </h3>
                   <p className="text-gray-500 leading-relaxed mb-6">
-                    {project.overview}
+                    {project.description}
                   </p>
                   <div className="flex flex-wrap gap-2 mb-6">
-                    {project.tag && (
-                      <Badge key={project.tag} variant="secondary" className="text-xs">
-                        {project.tag}
-                      </Badge>
-                    )}
-                    {project.tools?.slice(0, 2).map((tool) => (
-                      <Badge key={tool} variant="outline" className="text-xs">
-                        {tool}
+                    {project.tags?.map((tag) => (
+                      <Badge key={tag} variant="secondary" className="text-xs">
+                        {tag}
                       </Badge>
                     ))}
                   </div>
@@ -134,9 +120,9 @@ export function Projects() {
                 </div>
 
                 <div className="flex-1 w-full rounded-2xl overflow-hidden bg-gray-50 border border-gray-200">
-                  {project.image ? (
+                  {project.heroImage ? (
                     <img 
-                      src={project.image} 
+                      src={project.heroImage} 
                       alt={project.title} 
                       className="w-full h-auto object-cover"
                     />

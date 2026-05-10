@@ -86,6 +86,15 @@ const projectSchema = new mongoose.Schema({
   tools: [{
     type: String,
   }],
+  category: {
+    type: String,
+  },
+  description: {
+    type: String,
+  },
+  tags: [{
+    type: String,
+  }],
   heroImage: {
     type: String,
   },
