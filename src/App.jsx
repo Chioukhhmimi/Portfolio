@@ -14,7 +14,7 @@ import ProjectSinglePage from "./pages/ProjectSinglePage"
 
 // Admin imports
 import { AdminLayout } from "./admin/layouts/AdminLayout"
-import { AdminDashboard, ProjectsList, ProjectForm, BlogList, BlogForm, MessagesList, MessageDetail } from "./admin/pages"
+import { AdminDashboard, ProjectsList, ProjectForm, BlogList, BlogForm, MessagesList, MessageDetail, ClientsList, ClientForm } from "./admin/pages"
 
 function ScrollToTop() {
   const { pathname, hash } = useLocation()
@@ -71,6 +71,9 @@ function App() {
           <Route path="/admin/projects" element={<AdminLayout><ProjectsList /></AdminLayout>} />
           <Route path="/admin/projects/new" element={<AdminLayout><ProjectForm /></AdminLayout>} />
           <Route path="/admin/projects/:id/edit" element={<AdminLayout><ProjectForm /></AdminLayout>} />
+          <Route path="/admin/clients" element={<AdminLayout><ClientsList /></AdminLayout>} />
+          <Route path="/admin/clients/new" element={<AdminLayout><ClientForm /></AdminLayout>} />
+          <Route path="/admin/clients/:id/edit" element={<AdminLayout><ClientForm /></AdminLayout>} />
           <Route path="/admin/blog" element={<AdminLayout><BlogList /></AdminLayout>} />
           <Route path="/admin/blog/new" element={<AdminLayout><BlogForm /></AdminLayout>} />
           <Route path="/admin/blog/:id/edit" element={<AdminLayout><BlogForm /></AdminLayout>} />

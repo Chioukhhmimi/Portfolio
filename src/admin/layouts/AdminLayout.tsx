@@ -1,11 +1,12 @@
 import * as React from "react"
 import { Link, useLocation } from "react-router-dom"
 import { motion } from "framer-motion"
-import { 
-  LayoutDashboard, 
-  FolderKanban, 
-  FileText, 
-  MessageSquare, 
+import {
+  LayoutDashboard,
+  FolderKanban,
+  FileText,
+  MessageSquare,
+  Building2,
   Settings,
   ChevronLeft,
   LogOut
@@ -15,6 +16,7 @@ import DadycarLogo from "../../assets/logos/dadycar.svg"
 const menuItems = [
   { label: "Dashboard", icon: LayoutDashboard, href: "/admin" },
   { label: "Projects", icon: FolderKanban, href: "/admin/projects" },
+  { label: "Clients", icon: Building2, href: "/admin/clients" },
   { label: "Blog", icon: FileText, href: "/admin/blog" },
   { label: "Messages", icon: MessageSquare, href: "/admin/messages" },
 ]
