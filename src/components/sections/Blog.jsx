@@ -2,13 +2,14 @@ import * as React from "react"
 import { motion } from "framer-motion"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { portfolio } from "@/data/portfolio"
+import { fetchBlogPosts } from "@/lib/api"
 import { cn } from "@/lib/utils"
 
 const badgeColorMap = {
   blue: "bg-blue-50 text-blue-600",
   orange: "bg-orange-50 text-orange-600",
   teal: "bg-teal-50 text-teal-600",
+  green: "bg-green-50 text-green-600",
   default: "bg-gray-100 text-gray-600",
 }
 
@@ -35,6 +36,31 @@ const cardVariants = {
 }
 
 export function Blog() {
+  const [posts, setPosts] = React.useState([])
+  const [loading, setLoading] = React.useState(true)
+
+  React.useEffect(() => {
+    const loadPosts = async () => {
+      try {
+        const data = await fetchBlogPosts()
+        setPosts(data.filter(p => p.status === 'published'))
+      } catch (err) {
+        console.error('Failed to load blog posts:', err)
+      } finally {
+        setLoading(false)
+      }
+    }
+    loadPosts()
+  }, [])
+
+  if (loading) {
+    return null
+  }
+
+  if (posts.length === 0) {
+    return null
+  }
+
   return (
     <section className="py-24 px-6 md:px-12">
       <div className="max-w-6xl mx-auto">
@@ -59,10 +85,10 @@ export function Blog() {
           viewport={{ once: true, amount: 0.2 }}
           className="grid grid-cols-1 md:grid-cols-3 gap-6 overflow-x-auto md:overflow-visible snap-x snap-mandatory md:snap-none -mx-6 px-6 md:mx-0 md:px-0"
         >
-          {portfolio.blogPosts.map((post) => (
+          {posts.map((post) => (
             <motion.a
               key={post.id}
-              href={post.url}
+              href={post.mediumUrl || post.url}
               target="_blank"
               rel="noopener noreferrer"
               variants={cardVariants}
@@ -79,10 +105,10 @@ export function Blog() {
                     {post.title}
                   </h3>
                   <p className="text-sm text-gray-500 mt-2 leading-relaxed line-clamp-3">
-                    {post.description}
+                    {post.excerpt || post.description}
                   </p>
                   <div className="mt-4 flex items-center justify-between">
-                    <span className="text-xs text-gray-400">{post.readTime}</span>
+                    <span className="text-xs text-gray-400">{post.readingTime ? `${post.readingTime} min read` : ''}</span>
                     <span className="text-xs font-medium text-gray-900 hover:underline">
                       Read on Medium →
                     </span>

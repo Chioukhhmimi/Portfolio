@@ -33,3 +33,14 @@ export const fetchClients = async () => {
   const data = await response.json()
   return data.data
 }
+
+export const fetchBlogPosts = async () => {
+  const response = await fetch(`${baseURL}/blog`)
+  
+  if (!response.ok) {
+    throw new Error("Failed to fetch blog posts")
+  }
+  
+  const data = await response.json()
+  return data.data
+}

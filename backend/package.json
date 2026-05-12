@@ -20,7 +20,8 @@
     "express-validator": "^7.2.1",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.9.5",
-    "multer": "^2.1.1"
+    "multer": "^2.1.1",
+    "rss-parser": "^3.13.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.9"
