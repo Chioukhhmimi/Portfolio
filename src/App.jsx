@@ -9,7 +9,7 @@ import { About } from "@/components/sections/About"
 import { Blog } from "@/components/sections/Blog"
 import { Testimonials } from "@/components/sections/Testimonials"
 import { Projects } from "@/components/sections/Projects"
-import { Contact } from "@/components/sections/Contact"
+import { ContactSection } from "@/components/sections/ContactSection"
 import ProjectSinglePage from "./pages/ProjectSinglePage"
 
 // Admin imports
@@ -53,7 +53,7 @@ function App() {
                 <Projects />
                 <Blog />
                 <Testimonials />
-                <Contact />
+                <ContactSection />
               </motion.main>
               <Footer />
             </>
