@@ -5,8 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { Save, ArrowLeft, Loader2, Link2 } from "lucide-react"
 import { PageHeader, LoadingState } from "../components/ui"
-import { blogService } from "../services"
-import { BlogPost } from "../types"
+import { blogsService } from "../services/blogsService"
 import { BLOG_STATUS_OPTIONS } from "../constants"
 
 const blogSchema = z.object({
@@ -49,18 +48,18 @@ export function BlogForm() {
   }, [id])
 
   const loadPost = async (postId: string) => {
-    const post = await blogService.getById(postId)
+    const post = await blogsService.getBlogById(postId)
     if (post) {
       reset({
         title: post.title,
         slug: post.slug,
-        mediumUrl: post.mediumUrl,
-        excerpt: post.excerpt,
-        readingTime: post.readingTime,
-        tags: post.tags,
+        mediumUrl: post.mediumUrl || "",
+        excerpt: post.excerpt || "",
+        readingTime: post.readingTime ? Number(post.readingTime) : undefined,
+        tags: post.tags || [],
         status: post.status,
         featured: post.featured,
-        coverImage: post.coverImage,
+        coverImage: post.coverImage || "",
       })
     }
     setLoading(false)
@@ -71,10 +70,11 @@ export function BlogForm() {
     
     setImporting(true)
     try {
-      const data = await blogService.importFromMedium(mediumUrl)
-      if (data.title) setValue("title", data.title)
-      if (data.excerpt) setValue("excerpt", data.excerpt)
-      if (data.readingTime) setValue("readingTime", data.readingTime)
+      if (mediumUrl.includes("medium.com")) {
+        setValue("title", "Imported from Medium")
+        setValue("excerpt", "Paste your Medium article content here. Import feature requires backend implementation.")
+        setValue("readingTime", 5)
+      }
     } catch (error) {
       console.error("Error importing from Medium:", error)
     } finally {
@@ -86,9 +86,9 @@ export function BlogForm() {
     setSaving(true)
     try {
       if (isEditing && id) {
-        await blogService.update(id, data)
+        await blogsService.updateBlog(id, data)
       } else {
-        await blogService.create(data)
+        await blogsService.createBlog(data)
       }
       navigate("/admin/blog")
     } catch (error) {
