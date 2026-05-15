@@ -1,4 +1,5 @@
 import express from 'express';
+import { protect } from '../middleware/authMiddleware.js';
 import {
   getAllBlogs,
   getBlogById,
@@ -11,8 +12,8 @@ const router = express.Router();
 
 router.get('/', getAllBlogs);
 router.get('/:id', getBlogById);
-router.post('/', createBlog);
-router.put('/:id', updateBlog);
-router.delete('/:id', deleteBlog);
+router.post('/', protect, createBlog);
+router.put('/:id', protect, updateBlog);
+router.delete('/:id', protect, deleteBlog);
 
 export default router;

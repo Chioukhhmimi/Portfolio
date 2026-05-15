@@ -10,8 +10,7 @@ import {
   SelectInput,
   ConfirmDialog
 } from "../components/ui"
-import { blogService } from "../services"
-import { BlogPost } from "../types"
+import { blogsService, BlogPost } from "../services/blogsService"
 import { BLOG_STATUS_OPTIONS } from "../constants"
 
 export function BlogList() {
@@ -27,14 +26,14 @@ export function BlogList() {
   }, [])
 
   const loadPosts = async () => {
-    const data = await blogService.getAll()
+    const data = await blogsService.getBlogs()
     setPosts(data)
     setLoading(false)
   }
 
   const handleDelete = async () => {
     if (deleteId) {
-      await blogService.delete(deleteId)
+      await blogsService.deleteBlog(deleteId)
       await loadPosts()
       setDeleteId(null)
     }
