@@ -33,23 +33,13 @@ export const messagesService = {
     return (response.data || []).map(mapMessage)
   },
 
-  async getMessageById(id: string): Promise<Message | undefined> {
-    const response = await api.get(`/messages/${id}`) as ApiResponse<Message>
-    return response.data ? mapMessage(response.data) : undefined
-  },
-
   async markAsRead(id: string): Promise<Message | undefined> {
-    const response = await api.patch(`/messages/${id}/read`) as ApiResponse<Message>
+    const response = await api.patch(`/messages/${id}/read`, {}) as ApiResponse<Message>
     return response.data ? mapMessage(response.data) : undefined
   },
 
   async deleteMessage(id: string): Promise<boolean> {
     const response = await api.delete(`/messages/${id}`) as ApiResponse<string>
     return response.success
-  },
-
-  async getUnreadCount(): Promise<number> {
-    const messages = await this.getMessages()
-    return messages.filter(m => !m.read).length
   },
 }

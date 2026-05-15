@@ -11,20 +11,29 @@ import {
   ChevronLeft,
   LogOut
 } from "lucide-react"
-import DadycarLogo from "../../assets/logos/dadycar.svg"
+import { messagesService } from "../services/messagesService"
 
 const menuItems = [
   { label: "Dashboard", icon: LayoutDashboard, href: "/admin" },
   { label: "Projects", icon: FolderKanban, href: "/admin/projects" },
   { label: "Clients", icon: Building2, href: "/admin/clients" },
   { label: "Blog", icon: FileText, href: "/admin/blog" },
-  { label: "Messages", icon: MessageSquare, href: "/admin/messages" },
+  { label: "Messages", icon: MessageSquare, href: "/admin/messages", showBadge: true },
 ]
 
 export function AdminSidebar() {
   const location = useLocation()
   const [collapsed, setCollapsed] = React.useState(false)
   const [mobileOpen, setMobileOpen] = React.useState(false)
+  const [unreadCount, setUnreadCount] = React.useState(0)
+
+  React.useEffect(() => {
+    const fetchUnreadCount = async () => {
+      const messages = await messagesService.getMessages()
+      setUnreadCount(messages.filter(m => !m.read).length)
+    }
+    fetchUnreadCount()
+  }, [])
 
   return (
     <>
@@ -73,7 +82,14 @@ export function AdminSidebar() {
                       : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
                   }`}
                 >
-                  <item.icon className="w-5 h-5 flex-shrink-0" />
+                  <div className="relative">
+                    <item.icon className="w-5 h-5 flex-shrink-0" />
+                    {item.showBadge && unreadCount > 0 && (
+                      <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                        {unreadCount > 9 ? '9+' : unreadCount}
+                      </span>
+                    )}
+                  </div>
                   {!collapsed && (
                     <span className="font-medium">{item.label}</span>
                   )}

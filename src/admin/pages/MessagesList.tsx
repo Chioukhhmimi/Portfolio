@@ -1,25 +1,48 @@
 import * as React from "react"
-import { Link, useNavigate } from "react-router-dom"
-import { Mail, MailOpen, Archive, Trash2, Tag } from "lucide-react"
-import { 
-  PageHeader, 
-  LoadingState, 
-  EmptyState, 
-  StatusBadge,
-  SearchInput,
-  SelectInput,
-  ConfirmDialog
+import { Mail, Trash2, ChevronDown, ChevronUp } from "lucide-react"
+import {
+  PageHeader,
+  LoadingState,
+  EmptyState,
+  ConfirmDialog,
 } from "../components/ui"
-import { messagesService } from "../services"
-import { Message, MessageStatus } from "../types"
-import { MESSAGE_STATUS_OPTIONS } from "../constants"
+import { messagesService, Message } from "../services/messagesService"
+
+function formatDate(dateString: string): string {
+  const date = new Date(dateString)
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  })
+}
+
+function LoadingSkeleton() {
+  return (
+    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+      <div className="divide-y divide-gray-200">
+        {[...Array(5)].map((_, i) => (
+          <div key={i} className="px-6 py-4 animate-pulse">
+            <div className="flex items-center gap-4">
+              <div className="w-10 h-10 bg-gray-200 rounded-full" />
+              <div className="flex-1 space-y-2">
+                <div className="h-4 bg-gray-200 rounded w-1/4" />
+                <div className="h-3 bg-gray-200 rounded w-1/6" />
+              </div>
+              <div className="h-6 bg-gray-200 rounded w-16" />
+              <div className="h-4 bg-gray-200 rounded w-24" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
 
 export function MessagesList() {
-  const navigate = useNavigate()
   const [messages, setMessages] = React.useState<Message[]>([])
   const [loading, setLoading] = React.useState(true)
-  const [search, setSearch] = React.useState("")
-  const [statusFilter, setStatusFilter] = React.useState("")
+  const [expandedId, setExpandedId] = React.useState<string | null>(null)
   const [deleteId, setDeleteId] = React.useState<string | null>(null)
 
   React.useEffect(() => {
@@ -27,144 +50,162 @@ export function MessagesList() {
   }, [])
 
   const loadMessages = async () => {
-    const data = await messagesService.getAll()
+    const data = await messagesService.getMessages()
     setMessages(data)
     setLoading(false)
   }
 
-  const handleArchive = async (id: string) => {
-    await messagesService.archive(id)
-    await loadMessages()
+  const handleExpand = async (id: string) => {
+    if (expandedId === id) {
+      setExpandedId(null)
+      return
+    }
+
+    const message = messages.find(m => m.id === id)
+    if (message && !message.read) {
+      await messagesService.markAsRead(id)
+      setMessages(prev =>
+        prev.map(m => (m.id === id ? { ...m, read: true } : m))
+      )
+    }
+    setExpandedId(id)
   }
 
   const handleDelete = async () => {
     if (deleteId) {
-      await messagesService.delete(deleteId)
-      await loadMessages()
+      await messagesService.deleteMessage(deleteId)
+      setMessages(prev => prev.filter(m => m.id !== deleteId))
+      if (expandedId === deleteId) {
+        setExpandedId(null)
+      }
       setDeleteId(null)
     }
   }
 
-  const filteredMessages = messages.filter(m => {
-    const matchesSearch = !search || 
-      m.name.toLowerCase().includes(search.toLowerCase()) ||
-      m.email.toLowerCase().includes(search.toLowerCase()) ||
-      m.subject.toLowerCase().includes(search.toLowerCase())
-    const matchesStatus = !statusFilter || m.status === statusFilter
-    return matchesSearch && matchesStatus
-  })
-
   if (loading) {
     return (
       <div>
-        <PageHeader 
-          title="Messages" 
+        <PageHeader
+          title="Messages"
           description="View contact form submissions"
         />
-        <LoadingState />
+        <LoadingSkeleton />
       </div>
     )
   }
 
   return (
     <div>
-      <PageHeader 
-        title="Messages" 
+      <PageHeader
+        title="Messages"
         description="View contact form submissions"
       />
 
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-        <div className="p-4 border-b border-gray-200 flex items-center justify-between">
-          <SearchInput placeholder="Search messages..." value={search} onChange={setSearch} />
-          <SelectInput
-            value={statusFilter}
-            onChange={setStatusFilter}
-            options={MESSAGE_STATUS_OPTIONS as { label: string; value: string }[]}
-            placeholder="All Status"
-          />
-        </div>
+      {messages.length === 0 ? (
+        <EmptyState
+          title="No messages yet"
+          description="Contact form submissions will appear here"
+        />
+      ) : (
+        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+          <div className="divide-y divide-gray-200">
+            {messages.map((message) => (
+              <div
+                key={message.id}
+                className={`${!message.read ? "bg-blue-50/50" : ""} ${
+                  expandedId === message.id ? "bg-gray-50" : ""
+                }`}
+              >
+                <div
+                  className="px-6 py-4 cursor-pointer hover:bg-gray-50 transition-colors"
+                  onClick={() => handleExpand(message.id)}
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="flex-shrink-0">
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                        !message.read ? "bg-blue-100 text-blue-600" : "bg-gray-100 text-gray-600"
+                      }`}>
+                        <Mail className="w-5 h-5" />
+                      </div>
+                    </div>
 
-        {filteredMessages.length === 0 ? (
-          <EmptyState 
-            title="No messages"
-            description={search || statusFilter ? "Try adjusting your filters" : "No messages received yet"}
-          />
-        ) : (
-          <table className="w-full">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-6 py-3">From</th>
-                <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-6 py-3">Subject</th>
-                <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-6 py-3">Status</th>
-                <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-6 py-3">Date</th>
-                <th className="text-right text-xs font-medium text-gray-500 uppercase tracking-wider px-6 py-3">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200">
-              {filteredMessages.map((message) => (
-                <tr key={message.id} className={`hover:bg-gray-50 ${message.status === 'unread' ? 'bg-blue-50/30' : ''}`}>
-                  <td className="px-6 py-4">
-                    <Link to={`/admin/messages/${message.id}`} className="font-medium text-gray-900 hover:text-gray-600">
-                      {message.name}
-                    </Link>
-                    <p className="text-sm text-gray-500">{message.email}</p>
-                  </td>
-                  <td className="px-6 py-4">
-                    <Link to={`/admin/messages/${message.id}`} className="text-gray-900 hover:text-gray-600">
-                      {message.subject}
-                    </Link>
-                    <p className="text-sm text-gray-500">{message.message.slice(0, 50)}...</p>
-                  </td>
-                  <td className="px-6 py-4">
-                    <StatusBadge status={message.status} type="message" />
-                  </td>
-                  <td className="px-6 py-4 text-gray-500 text-sm">
-                    {new Date(message.dateTime).toLocaleDateString()}
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center justify-end gap-2">
-                      {message.status === 'unread' && (
-                        <button
-                          onClick={() => messagesService.markAsRead(message.id).then(loadMessages)}
-                          className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg"
-                          title="Mark as Read"
-                        >
-                          <Mail className="w-4 h-4" />
-                        </button>
-                      )}
-                      {message.status === 'read' && (
-                        <button
-                          onClick={() => messagesService.markAsUnread(message.id).then(loadMessages)}
-                          className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg"
-                          title="Mark as Unread"
-                        >
-                          <MailOpen className="w-4 h-4" />
-                        </button>
-                      )}
-                      {message.status !== 'archived' && (
-                        <button
-                          onClick={() => handleArchive(message.id)}
-                          className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg"
-                          title="Archive"
-                        >
-                          <Archive className="w-4 h-4" />
-                        </button>
-                      )}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium text-gray-900 truncate">
+                          {message.name}
+                        </span>
+                        <span className="text-gray-500 text-sm">
+                          {message.email}
+                        </span>
+                      </div>
+                      <p className="text-sm text-gray-500 truncate">
+                        {message.message.slice(0, 80)}
+                        {message.message.length > 80 ? "..." : ""}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center gap-3 flex-shrink-0">
+                      <span className="text-sm text-gray-500">
+                        {message.phone || "—"}
+                      </span>
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                        !message.read
+                          ? "bg-red-100 text-red-700"
+                          : "bg-gray-100 text-gray-700"
+                      }`}>
+                        {!message.read ? "New" : "Read"}
+                      </span>
+                      <span className="text-sm text-gray-500">
+                        {formatDate(message.createdAt)}
+                      </span>
                       <button
-                        onClick={() => setDeleteId(message.id)}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          setDeleteId(message.id)
+                        }}
                         className="p-2 text-gray-400 hover:text-red-600 hover:bg-gray-100 rounded-lg"
                         title="Delete"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
+                      {expandedId === message.id ? (
+                        <ChevronUp className="w-4 h-4 text-gray-400" />
+                      ) : (
+                        <ChevronDown className="w-4 h-4 text-gray-400" />
+                      )}
                     </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </div>
+                  </div>
+                </div>
+
+                {expandedId === message.id && (
+                  <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-4 text-sm">
+                        <span className="font-medium text-gray-700">From:</span>
+                        <span className="text-gray-900">{message.name}</span>
+                        <span className="text-gray-500">&lt;{message.email}&gt;</span>
+                        {message.phone && (
+                          <>
+                            <span className="font-medium text-gray-700 ml-4">Phone:</span>
+                            <span className="text-gray-900">{message.phone}</span>
+                          </>
+                        )}
+                      </div>
+                      <div className="text-sm text-gray-500">
+                        <span className="font-medium text-gray-700">Received:</span>{" "}
+                        {formatDate(message.createdAt)}
+                      </div>
+                      <div className="mt-4 p-4 bg-white rounded-lg border border-gray-200">
+                        <p className="text-gray-900 whitespace-pre-wrap">{message.message}</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <ConfirmDialog
         open={!!deleteId}

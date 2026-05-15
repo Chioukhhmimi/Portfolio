@@ -9,25 +9,19 @@ const messageSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  subject: {
+  phone: {
     type: String,
   },
   message: {
     type: String,
     required: true,
   },
-  status: {
-    type: String,
-    enum: ['unread', 'read', 'archived'],
-    default: 'unread',
+  read: {
+    type: Boolean,
+    default: false,
   },
-  source: {
-    type: String,
-  },
-  receivedAt: {
-    type: Date,
-    default: Date.now,
-  },
+}, {
+  timestamps: true,
 });
 
 const Message = mongoose.model('Message', messageSchema);
