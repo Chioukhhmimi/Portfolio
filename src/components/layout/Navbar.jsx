@@ -137,7 +137,7 @@ export function Navbar() {
                       to={link.href}
                       onClick={() => handleLinkClick(link.href, sectionId)}
                       className={cn(
-                        "block py-3 text-base font-medium transition-colors inline-flex items-center gap-2",
+                        "block py-3 text-base font-medium transition-colors flex items-center gap-2",
                         activeSection === sectionId
                           ? "text-gray-900"
                           : "text-gray-800 hover:text-gray-900"
