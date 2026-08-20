@@ -58,8 +58,11 @@ export function LogoStrip() {
               <img
                 key={`${client.id}-${index}`}
                 src={client.logo}
-                alt={client.name}
+                alt={`${client.name} logo`}
                 className="h-8 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity"
+                loading="lazy"
+                width={120}
+                height={32}
               />
             ))}
           </motion.div>

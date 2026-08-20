@@ -6,6 +6,7 @@ import { Footer } from "@/components/layout/Footer"
 import { ArrowRight, Loader2 } from "lucide-react"
 import { Link } from "react-router-dom"
 import { fetchProjectById } from "@/lib/api"
+import { SEO } from "@/components/SEO"
 
 const fadeUp = {
   initial: { opacity: 0, y: 30 },
@@ -101,8 +102,18 @@ export function ProjectSinglePage() {
     )
   }
 
+  const projectDescription = project
+    ? `${project.title} — ${project.role}. ${project.overview}`
+    : undefined
+
   return (
     <>
+      <SEO
+        title={project?.title}
+        description={projectDescription}
+        url={`/projects/${id}`}
+        type="article"
+      />
       <Navbar />
       <div className="min-h-screen bg-white">
         <div className="max-w-5xl mx-auto px-6 md:px-12 pt-8">
@@ -180,8 +191,11 @@ export function ProjectSinglePage() {
             {project.heroImage ? (
               <img 
                 src={project.heroImage} 
-                alt={project.title} 
+                alt={`${project.title} — Hero image`} 
                 className="w-full h-auto"
+                loading="eager"
+                width={1200}
+                height={675}
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center">
@@ -409,8 +423,11 @@ export function ProjectSinglePage() {
                   {screen.src ? (
                     <img 
                       src={screen.src} 
-                      alt={screen.label} 
+                      alt={`${project.title} — ${screen.label}`} 
                       className="w-full h-auto"
+                      loading="lazy"
+                      width={800}
+                      height={450}
                     />
                   ) : (
                     <div className="aspect-video flex items-center justify-center">

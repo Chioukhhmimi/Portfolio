@@ -1,5 +1,5 @@
 import * as React from "react"
-import { BrowserRouter, Routes, Route, Link, useLocation } from "react-router-dom"
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom"
 import { motion, AnimatePresence } from "framer-motion"
 import { Navbar } from "@/components/layout/Navbar"
 import { Footer } from "@/components/layout/Footer"
@@ -11,6 +11,8 @@ import { Testimonials } from "@/components/sections/Testimonials"
 import { Projects } from "@/components/sections/Projects"
 import { ContactSection } from "@/components/sections/ContactSection"
 import ProjectSinglePage from "./pages/ProjectSinglePage"
+import { NotFound } from "./pages/NotFound"
+import { SEO } from "@/components/SEO"
 
 // Admin imports
 import { AdminLayout } from "./admin/layouts/AdminLayout"
@@ -34,6 +36,15 @@ function ScrollToTop() {
   return null
 }
 
+function AdminNoIndex() {
+  return (
+    <SEO
+      title="Admin"
+      noindex
+    />
+  )
+}
+
 function App() {
   return (
     <BrowserRouter>
@@ -42,6 +53,10 @@ function App() {
         <Routes>
           <Route path="/" element={
             <>
+              <SEO
+                title={null}
+                description="Hmimi Chioukh — Product Designer specializing in SaaS platforms, UI/UX design, and AI-powered workflows. View case studies from DadyCar, FocusCare, Shihany, Resaglob."
+              />
               <Navbar />
               <motion.main
                 initial={{ opacity: 0 }}
@@ -60,25 +75,26 @@ function App() {
           } />
           <Route path="/projects/:id" element={
             <>
-              <Navbar />
               <ProjectSinglePage />
-              <Footer />
             </>
           } />
           
-          {/* Admin Routes - No Navbar/Footer */}
-          <Route path="/admin" element={<AdminLayout><AdminDashboard /></AdminLayout>} />
-          <Route path="/admin/projects" element={<AdminLayout><ProjectsList /></AdminLayout>} />
-          <Route path="/admin/projects/new" element={<AdminLayout><ProjectForm /></AdminLayout>} />
-          <Route path="/admin/projects/:id/edit" element={<AdminLayout><ProjectForm /></AdminLayout>} />
-          <Route path="/admin/clients" element={<AdminLayout><ClientsList /></AdminLayout>} />
-          <Route path="/admin/clients/new" element={<AdminLayout><ClientForm /></AdminLayout>} />
-          <Route path="/admin/clients/:id/edit" element={<AdminLayout><ClientForm /></AdminLayout>} />
-          <Route path="/admin/blog" element={<AdminLayout><BlogList /></AdminLayout>} />
-          <Route path="/admin/blog/new" element={<AdminLayout><BlogForm /></AdminLayout>} />
-          <Route path="/admin/blog/:id/edit" element={<AdminLayout><BlogForm /></AdminLayout>} />
-          <Route path="/admin/messages" element={<AdminLayout><MessagesList /></AdminLayout>} />
-          <Route path="/admin/messages/:id" element={<AdminLayout><MessageDetail /></AdminLayout>} />
+          {/* Admin Routes - No Navbar/Footer, Noindex */}
+          <Route path="/admin" element={<><AdminNoIndex /><AdminLayout><AdminDashboard /></AdminLayout></>} />
+          <Route path="/admin/projects" element={<><AdminNoIndex /><AdminLayout><ProjectsList /></AdminLayout></>} />
+          <Route path="/admin/projects/new" element={<><AdminNoIndex /><AdminLayout><ProjectForm /></AdminLayout></>} />
+          <Route path="/admin/projects/:id/edit" element={<><AdminNoIndex /><AdminLayout><ProjectForm /></AdminLayout></>} />
+          <Route path="/admin/clients" element={<><AdminNoIndex /><AdminLayout><ClientsList /></AdminLayout></>} />
+          <Route path="/admin/clients/new" element={<><AdminNoIndex /><AdminLayout><ClientForm /></AdminLayout></>} />
+          <Route path="/admin/clients/:id/edit" element={<><AdminNoIndex /><AdminLayout><ClientForm /></AdminLayout></>} />
+          <Route path="/admin/blog" element={<><AdminNoIndex /><AdminLayout><BlogList /></AdminLayout></>} />
+          <Route path="/admin/blog/new" element={<><AdminNoIndex /><AdminLayout><BlogForm /></AdminLayout></>} />
+          <Route path="/admin/blog/:id/edit" element={<><AdminNoIndex /><AdminLayout><BlogForm /></AdminLayout></>} />
+          <Route path="/admin/messages" element={<><AdminNoIndex /><AdminLayout><MessagesList /></AdminLayout></>} />
+          <Route path="/admin/messages/:id" element={<><AdminNoIndex /><AdminLayout><MessageDetail /></AdminLayout></>} />
+
+          {/* 404 */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </AnimatePresence>
     </BrowserRouter>

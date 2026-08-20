@@ -8,7 +8,6 @@ export const fetchProjects = async () => {
   }
   
   const data = await response.json()
-  console.log('📦 API Response - First project:', JSON.stringify(data.data[0], null, 2))
   return data.data
 }
 

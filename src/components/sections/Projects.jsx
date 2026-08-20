@@ -123,8 +123,11 @@ export function Projects() {
                   {project.heroImage ? (
                     <img 
                       src={project.heroImage} 
-                      alt={project.title} 
+                      alt={`${project.title} — ${project.category} case study`} 
                       className="w-full h-auto object-cover"
+                      loading="lazy"
+                      width={800}
+                      height={600}
                     />
                   ) : (
                     <div className="aspect-[4/3] flex items-center justify-center">
