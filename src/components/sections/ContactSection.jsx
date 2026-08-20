@@ -33,7 +33,8 @@ export function ContactSection() {
       })
 
       if (!response.ok) {
-        throw new Error("Something went wrong, try again.")
+        const errorData = await response.json().catch(() => null)
+        throw new Error(errorData?.message || "Something went wrong, try again.")
       }
 
       setSuccess(true)

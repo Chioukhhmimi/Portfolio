@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 
 const navLinks = [
   { name: "Works", href: "/" },
-  { name: "Resume", href: "/" },
+  { name: "Resume", href: "/CV-Hmimi-Chioukh-Product-Designer-EN.pdf", download: true },
   { name: "ZD System", href: "/", badge: true },
 ]
 
@@ -67,17 +67,30 @@ export function Navbar() {
         <nav className="hidden lg:flex items-center gap-6">
           {navLinks.map((link, idx) => {
             const sectionId = idx === 0 ? "projects" : idx === 1 ? "experience" : "about"
+            const linkClasses = cn(
+              "text-sm transition-colors inline-flex items-center gap-1",
+              activeSection === sectionId
+                ? "text-gray-900"
+                : "text-gray-600 hover:text-gray-900"
+            )
+            if (link.download) {
+              return (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  download
+                  className={linkClasses}
+                >
+                  {link.name}
+                </a>
+              )
+            }
             return (
               <Link
                 key={link.name}
                 to={link.href}
                 onClick={() => handleLinkClick(link.href, sectionId)}
-                className={cn(
-                  "text-sm transition-colors inline-flex items-center gap-1",
-                  activeSection === sectionId
-                    ? "text-gray-900"
-                    : "text-gray-600 hover:text-gray-900"
-                )}
+                className={linkClasses}
               >
                 {link.name}
                 {link.badge && (
@@ -126,22 +139,35 @@ export function Navbar() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.2, ease: "easeOut" }}
-              className="absolute top-full left-0 right-0 bg-white border-b border-gray-100 lg:hidden"
+              className="absolute top-full left-4 right-4 bg-white border border-gray-100 lg:hidden rounded-2xl shadow-lg"
             >
               <div className="px-6 py-4 space-y-1">
                 {navLinks.map((link, idx) => {
                   const sectionId = idx === 0 ? "projects" : idx === 1 ? "experience" : "about"
+                  const linkClasses = cn(
+                    "block py-3 text-base font-medium transition-colors flex items-center gap-2",
+                    activeSection === sectionId
+                      ? "text-gray-900"
+                      : "text-gray-800 hover:text-gray-900"
+                  )
+                  if (link.download) {
+                    return (
+                      <a
+                        key={link.name}
+                        href={link.href}
+                        download
+                        className={linkClasses}
+                      >
+                        {link.name}
+                      </a>
+                    )
+                  }
                   return (
                     <Link
                       key={link.name}
                       to={link.href}
                       onClick={() => handleLinkClick(link.href, sectionId)}
-                      className={cn(
-                        "block py-3 text-base font-medium transition-colors flex items-center gap-2",
-                        activeSection === sectionId
-                          ? "text-gray-900"
-                          : "text-gray-800 hover:text-gray-900"
-                      )}
+                      className={linkClasses}
                     >
                       {link.name}
                       {link.badge && (

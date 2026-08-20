@@ -1,4 +1,5 @@
 import Message from '../models/Message.js';
+import { sendContactEmail } from '../utils/sendEmail.js';
 
 export const getAllMessages = async (req, res) => {
   try {
@@ -32,6 +33,12 @@ export const createMessage = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Name, email, and message are required' });
     }
     const newMessage = await Message.create({ name, email, phone, message });
+
+    // Send email notification (non-blocking)
+    sendContactEmail({ name, email, phone, message }).catch((err) => {
+      console.error('Failed to send contact email:', err.message);
+    });
+
     res.status(201).json({ success: true, data: newMessage });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
