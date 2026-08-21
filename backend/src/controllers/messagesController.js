@@ -36,7 +36,7 @@ export const createMessage = async (req, res) => {
 
     // Send email notification (non-blocking)
     sendContactEmail({ name, email, phone, message }).catch((err) => {
-      console.error('Failed to send contact email:', err.message);
+      console.error('EMAIL_FAILED:', err.message, err.code || '');
     });
 
     res.status(201).json({ success: true, data: newMessage });

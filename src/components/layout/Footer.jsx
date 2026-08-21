@@ -100,7 +100,18 @@ export function Footer() {
             © {currentYear} {portfolio.name}. All rights reserved.
           </p>
           <p className="text-sm text-gray-400">
-            Designed with React, Tailwind CSS & Framer Motion
+            Designed with{" "}
+            <span className="inline-flex group cursor-default">
+              <span className="text-base transition-transform duration-200 group-hover:scale-125 group-hover:rotate-12">❤️</span>
+            </span>{" "}
+            <span className="text-progress font-medium">React</span>,{" "}
+            <span className="text-progress font-medium">Tailwind CSS</span>{" "}
+            &{" "}
+            <span className="wave-text font-medium text-gray-500 cursor-default">
+              {"Framer Motion".split("").map((char, i) => (
+                <span key={i}>{char === " " ? "\u00A0" : char}</span>
+              ))}
+            </span>
           </p>
         </div>
       </div>

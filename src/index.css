@@ -60,3 +60,61 @@
   font-weight: 600;
   font-style: normal;
 }
+
+/* Tailwind text - color sweep progress bar */
+.text-progress {
+  position: relative;
+  display: inline-block;
+  color: #9ca3af;
+  overflow: hidden;
+}
+
+.text-progress::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background: #111827;
+  transition: width 0.5s ease;
+}
+
+.text-progress:hover {
+  color: #111827;
+}
+
+.text-progress:hover::after {
+  width: 100%;
+}
+
+/* Framer Motion text - wave letters */
+.wave-text span {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.wave-text:hover span {
+  animation: letterWave 0.5s ease-in-out infinite;
+}
+
+.wave-text span:nth-child(1) { animation-delay: 0s; }
+.wave-text span:nth-child(2) { animation-delay: 0.03s; }
+.wave-text span:nth-child(3) { animation-delay: 0.06s; }
+.wave-text span:nth-child(4) { animation-delay: 0.09s; }
+.wave-text span:nth-child(5) { animation-delay: 0.12s; }
+.wave-text span:nth-child(6) { animation-delay: 0.15s; }
+.wave-text span:nth-child(7) { animation-delay: 0.18s; }
+.wave-text span:nth-child(8) { animation-delay: 0.21s; }
+.wave-text span:nth-child(9) { animation-delay: 0.24s; }
+.wave-text span:nth-child(10) { animation-delay: 0.27s; }
+.wave-text span:nth-child(11) { animation-delay: 0.3s; }
+.wave-text span:nth-child(12) { animation-delay: 0.33s; }
+.wave-text span:nth-child(13) { animation-delay: 0.36s; }
+.wave-text span:nth-child(14) { animation-delay: 0.39s; }
+.wave-text span:nth-child(15) { animation-delay: 0.42s; }
+
+@keyframes letterWave {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
