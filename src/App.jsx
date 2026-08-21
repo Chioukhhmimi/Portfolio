@@ -18,6 +18,8 @@ import { SEO } from "@/components/SEO"
 // Admin imports
 import { AdminLayout } from "./admin/layouts/AdminLayout"
 import { AdminDashboard, ProjectsList, ProjectForm, BlogList, BlogForm, MessagesList, MessageDetail, ClientsList, ClientForm } from "./admin/pages"
+import AdminLogin from "./admin/pages/AdminLogin"
+import { ProtectedRoute } from "./admin/components/ProtectedRoute"
 
 function ScrollToTop() {
   const { pathname, hash } = useLocation()
@@ -86,18 +88,19 @@ function App() {
           } />
           
           {/* Admin Routes - No Navbar/Footer, Noindex */}
-          <Route path="/admin" element={<><AdminNoIndex /><AdminLayout><AdminDashboard /></AdminLayout></>} />
-          <Route path="/admin/projects" element={<><AdminNoIndex /><AdminLayout><ProjectsList /></AdminLayout></>} />
-          <Route path="/admin/projects/new" element={<><AdminNoIndex /><AdminLayout><ProjectForm /></AdminLayout></>} />
-          <Route path="/admin/projects/:id/edit" element={<><AdminNoIndex /><AdminLayout><ProjectForm /></AdminLayout></>} />
-          <Route path="/admin/clients" element={<><AdminNoIndex /><AdminLayout><ClientsList /></AdminLayout></>} />
-          <Route path="/admin/clients/new" element={<><AdminNoIndex /><AdminLayout><ClientForm /></AdminLayout></>} />
-          <Route path="/admin/clients/:id/edit" element={<><AdminNoIndex /><AdminLayout><ClientForm /></AdminLayout></>} />
-          <Route path="/admin/blog" element={<><AdminNoIndex /><AdminLayout><BlogList /></AdminLayout></>} />
-          <Route path="/admin/blog/new" element={<><AdminNoIndex /><AdminLayout><BlogForm /></AdminLayout></>} />
-          <Route path="/admin/blog/:id/edit" element={<><AdminNoIndex /><AdminLayout><BlogForm /></AdminLayout></>} />
-          <Route path="/admin/messages" element={<><AdminNoIndex /><AdminLayout><MessagesList /></AdminLayout></>} />
-          <Route path="/admin/messages/:id" element={<><AdminNoIndex /><AdminLayout><MessageDetail /></AdminLayout></>} />
+          <Route path="/admin/login" element={<><AdminNoIndex /><AdminLogin /></>} />
+          <Route path="/admin" element={<><AdminNoIndex /><ProtectedRoute><AdminLayout><AdminDashboard /></AdminLayout></ProtectedRoute></>} />
+          <Route path="/admin/projects" element={<><AdminNoIndex /><ProtectedRoute><AdminLayout><ProjectsList /></AdminLayout></ProtectedRoute></>} />
+          <Route path="/admin/projects/new" element={<><AdminNoIndex /><ProtectedRoute><AdminLayout><ProjectForm /></AdminLayout></ProtectedRoute></>} />
+          <Route path="/admin/projects/:id/edit" element={<><AdminNoIndex /><ProtectedRoute><AdminLayout><ProjectForm /></AdminLayout></ProtectedRoute></>} />
+          <Route path="/admin/clients" element={<><AdminNoIndex /><ProtectedRoute><AdminLayout><ClientsList /></AdminLayout></ProtectedRoute></>} />
+          <Route path="/admin/clients/new" element={<><AdminNoIndex /><ProtectedRoute><AdminLayout><ClientForm /></AdminLayout></ProtectedRoute></>} />
+          <Route path="/admin/clients/:id/edit" element={<><AdminNoIndex /><ProtectedRoute><AdminLayout><ClientForm /></AdminLayout></ProtectedRoute></>} />
+          <Route path="/admin/blog" element={<><AdminNoIndex /><ProtectedRoute><AdminLayout><BlogList /></AdminLayout></ProtectedRoute></>} />
+          <Route path="/admin/blog/new" element={<><AdminNoIndex /><ProtectedRoute><AdminLayout><BlogForm /></AdminLayout></ProtectedRoute></>} />
+          <Route path="/admin/blog/:id/edit" element={<><AdminNoIndex /><ProtectedRoute><AdminLayout><BlogForm /></AdminLayout></ProtectedRoute></>} />
+          <Route path="/admin/messages" element={<><AdminNoIndex /><ProtectedRoute><AdminLayout><MessagesList /></AdminLayout></ProtectedRoute></>} />
+          <Route path="/admin/messages/:id" element={<><AdminNoIndex /><ProtectedRoute><AdminLayout><MessageDetail /></AdminLayout></ProtectedRoute></>} />
 
           {/* 404 */}
           <Route path="*" element={<NotFound />} />

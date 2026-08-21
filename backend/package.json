@@ -6,6 +6,7 @@
     "dev": "nodemon server.js",
     "start": "node server.js",
     "seed": "node scripts/seed.js",
+    "seed:admin": "node scripts/seedAdmin.js",
     "migrate:images": "node scripts/migrateImages.js",
     "link:images": "node scripts/linkImagesToProjects.js",
     "migrate:previews": "node scripts/migratePreviewImages.js",

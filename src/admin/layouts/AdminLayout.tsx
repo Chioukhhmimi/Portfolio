@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Link, useLocation } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import { motion } from "framer-motion"
 import {
   LayoutDashboard,
@@ -23,6 +23,7 @@ const menuItems = [
 
 export function AdminSidebar() {
   const location = useLocation()
+  const navigate = useNavigate()
   const [collapsed, setCollapsed] = React.useState(false)
   const [mobileOpen, setMobileOpen] = React.useState(false)
   const [unreadCount, setUnreadCount] = React.useState(0)
@@ -34,6 +35,11 @@ export function AdminSidebar() {
     }
     fetchUnreadCount()
   }, [])
+
+  const handleLogout = () => {
+    localStorage.removeItem("admin_token")
+    navigate("/admin/login", { replace: true })
+  }
 
   return (
     <>
@@ -109,16 +115,15 @@ export function AdminSidebar() {
               <Settings className="w-5 h-5 flex-shrink-0" />
               {!collapsed && <span className="font-medium">Settings</span>}
             </Link>
-            <Link
-              to="/"
-              onClick={() => setMobileOpen(false)}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors ${
+            <button
+              onClick={handleLogout}
+              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 hover:bg-red-50 hover:text-red-600 transition-colors ${
                 collapsed ? 'justify-center' : ''
               }`}
             >
               <LogOut className="w-5 h-5 flex-shrink-0" />
-              {!collapsed && <span className="font-medium">Back to Site</span>}
-            </Link>
+              {!collapsed && <span className="font-medium">Logout</span>}
+            </button>
           </div>
         </div>
       </aside>
