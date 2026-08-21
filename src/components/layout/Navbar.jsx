@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 const navLinks = [
   { name: "Works", href: "/" },
   { name: "Resume", href: "/CV-Hmimi-Chioukh-Product-Designer-EN.pdf", download: true },
+  { name: "Resources", href: "/resources" },
   { name: "ZD System", href: "/", badge: true },
 ]
 
@@ -66,7 +67,7 @@ export function Navbar() {
         {/* Nav Links - Center (Desktop only) */}
         <nav className="hidden lg:flex items-center gap-6">
           {navLinks.map((link, idx) => {
-            const sectionId = idx === 0 ? "projects" : idx === 1 ? "experience" : "about"
+            const sectionId = idx === 0 ? "projects" : idx === 1 ? "experience" : idx === 2 ? null : "about"
             const linkClasses = cn(
               "text-sm transition-colors inline-flex items-center gap-1",
               activeSection === sectionId
@@ -143,7 +144,7 @@ export function Navbar() {
             >
               <div className="px-6 py-4 space-y-1">
                 {navLinks.map((link, idx) => {
-                  const sectionId = idx === 0 ? "projects" : idx === 1 ? "experience" : "about"
+                  const sectionId = idx === 0 ? "projects" : idx === 1 ? "experience" : idx === 2 ? null : "about"
                   const linkClasses = cn(
                     "block py-3 text-base font-medium transition-colors flex items-center gap-2",
                     activeSection === sectionId

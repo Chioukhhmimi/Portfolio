@@ -7,12 +7,22 @@ import messagesRoutes from './routes/messagesRoutes.js';
 import clientsRoutes from './routes/clientsRoutes.js';
 import dashboardRoutes from './routes/dashboardRoutes.js';
 import errorMiddleware from './middleware/errorMiddleware.js';
+import { connectDB } from './lib/db.js';
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
 
 app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectsRoutes);

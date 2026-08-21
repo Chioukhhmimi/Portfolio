@@ -11,6 +11,7 @@ import { Testimonials } from "@/components/sections/Testimonials"
 import { Projects } from "@/components/sections/Projects"
 import { ContactSection } from "@/components/sections/ContactSection"
 import ProjectSinglePage from "./pages/ProjectSinglePage"
+import ResourcesPage from "./pages/ResourcesPage"
 import { NotFound } from "./pages/NotFound"
 import { SEO } from "@/components/SEO"
 
@@ -76,6 +77,11 @@ function App() {
           <Route path="/projects/:id" element={
             <>
               <ProjectSinglePage />
+            </>
+          } />
+          <Route path="/resources" element={
+            <>
+              <ResourcesPage />
             </>
           } />
           
