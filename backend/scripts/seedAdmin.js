@@ -12,7 +12,7 @@ const seedAdmin = async () => {
     await mongoose.connect(process.env.MONGODB_URI || process.env.MONGO_URI);
     console.log('Connected to MongoDB');
 
-    const email = process.env.ADMIN_EMAIL || 'admin@hmimi.design';
+    const email = process.env.ADMIN_EMAIL || 'hmimichiouukh@gmail.com';
     const password = process.env.ADMIN_PASSWORD || 'admin123';
     const name = process.env.ADMIN_NAME || 'Hmimi Chioukh';
 
