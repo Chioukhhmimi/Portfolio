@@ -19,6 +19,8 @@ import { SEO } from "@/components/SEO"
 import { AdminLayout } from "./admin/layouts/AdminLayout"
 import { AdminDashboard, ProjectsList, ProjectForm, BlogList, BlogForm, MessagesList, MessageDetail, ClientsList, ClientForm } from "./admin/pages"
 import AdminLogin from "./admin/pages/AdminLogin"
+import ForgotPassword from "./admin/pages/ForgotPassword"
+import ResetPassword from "./admin/pages/ResetPassword"
 import { ProtectedRoute } from "./admin/components/ProtectedRoute"
 
 function ScrollToTop() {
@@ -89,6 +91,8 @@ function App() {
           
           {/* Admin Routes - No Navbar/Footer, Noindex */}
           <Route path="/admin/login" element={<><AdminNoIndex /><AdminLogin /></>} />
+          <Route path="/admin/forgot-password" element={<><AdminNoIndex /><ForgotPassword /></>} />
+          <Route path="/admin/reset-password/:token" element={<><AdminNoIndex /><ResetPassword /></>} />
           <Route path="/admin" element={<><AdminNoIndex /><ProtectedRoute><AdminLayout><AdminDashboard /></AdminLayout></ProtectedRoute></>} />
           <Route path="/admin/projects" element={<><AdminNoIndex /><ProtectedRoute><AdminLayout><ProjectsList /></AdminLayout></ProtectedRoute></>} />
           <Route path="/admin/projects/new" element={<><AdminNoIndex /><ProtectedRoute><AdminLayout><ProjectForm /></AdminLayout></ProtectedRoute></>} />
