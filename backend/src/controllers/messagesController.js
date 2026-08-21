@@ -34,10 +34,12 @@ export const createMessage = async (req, res) => {
     }
     const newMessage = await Message.create({ name, email, phone, message });
 
-    // Send email notification (non-blocking)
-    sendContactEmail({ name, email, phone, message }).catch((err) => {
+    // Send email notification (blocking for debugging)
+    try {
+      await sendContactEmail({ name, email, phone, message });
+    } catch (err) {
       console.error('EMAIL_FAILED:', err.message, err.code || '');
-    });
+    }
 
     res.status(201).json({ success: true, data: newMessage });
   } catch (error) {

@@ -9,6 +9,9 @@ const transporter = nodemailer.createTransport({
 });
 
 export async function sendEmail({ to, subject, html, text }) {
+  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+    throw new Error('EMAIL_USER or EMAIL_PASS not set');
+  }
   return transporter.sendMail({
     from: process.env.EMAIL_USER,
     to,
@@ -19,6 +22,9 @@ export async function sendEmail({ to, subject, html, text }) {
 }
 
 export async function sendContactEmail({ name, email, phone, message }) {
+  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+    throw new Error('EMAIL_USER or EMAIL_PASS not set');
+  }
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: process.env.EMAIL_TO || process.env.EMAIL_USER,
