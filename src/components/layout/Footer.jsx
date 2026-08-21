@@ -62,12 +62,28 @@ export function Footer() {
                 LinkedIn
               </a>
               <a
+                href={portfolio.social.dribbble}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm text-gray-500 hover:text-gray-900 transition-colors"
+              >
+                Dribbble
+              </a>
+              <a
                 href={portfolio.social.github}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-sm text-gray-500 hover:text-gray-900 transition-colors"
               >
                 GitHub
+              </a>
+              <a
+                href={portfolio.social.behance}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm text-gray-500 hover:text-gray-900 transition-colors"
+              >
+                Behance
               </a>
               <a
                 href={portfolio.social.email}

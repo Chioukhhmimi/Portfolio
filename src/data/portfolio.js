@@ -130,9 +130,11 @@ By combining product thinking, system design, and AI-powered workflows, I simpli
     }
   ],
   social: {
-    github: "https://github.com",
-    linkedin: "https://linkedin.com",
-    email: "mailto:hmimi@example.com"
+    linkedin: "https://linkedin.com/in/hmimi-chioukh",
+    dribbble: "https://dribbble.com/chioukh_hmimi",
+    github: "https://github.com/Chioukhhmimi",
+    behance: "https://www.behance.net/thekinghc16490",
+    email: "mailto:hmimichiouukh@gmail.com"
   },
   blogPosts: [
     {

@@ -11,14 +11,7 @@ import { connectDB } from './lib/db.js';
 
 const app = express();
 
-app.use(cors({
-  origin: [
-    'http://localhost:5173',
-    'http://localhost:5174',
-    'https://portfolio-9vjg3mm6y-chioukhhmimis-projects.vercel.app',
-  ],
-  credentials: true,
-}));
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
