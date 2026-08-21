@@ -11,7 +11,14 @@ import { connectDB } from './lib/db.js';
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: [
+    'http://localhost:5173',
+    'http://localhost:5174',
+    'https://portfolio-9vjg3mm6y-chioukhhmimis-projects.vercel.app',
+  ],
+  credentials: true,
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -30,6 +37,10 @@ app.use('/api/blog', blogRoutes);
 app.use('/api/messages', messagesRoutes);
 app.use('/api/clients', clientsRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+
+app.get('/', (req, res) => {
+  res.json({ status: 'ok' });
+});
 
 app.use(errorMiddleware);
 
