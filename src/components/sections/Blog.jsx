@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { fetchBlogPosts } from "@/lib/api"
 import { cn } from "@/lib/utils"
+import { Link } from "react-router-dom"
 
 const badgeColorMap = {
   blue: "bg-blue-50 text-blue-600",
@@ -85,38 +86,40 @@ export function Blog() {
           viewport={{ once: true, amount: 0.2 }}
           className="grid grid-cols-1 md:grid-cols-3 gap-6 overflow-x-auto md:overflow-visible snap-x snap-mandatory md:snap-none -mx-6 px-6 md:mx-0 md:px-0"
         >
-          {posts.map((post) => (
-            <motion.a
-              key={post.id}
-              href={post.mediumUrl || post.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              variants={cardVariants}
-              whileHover={{ y: -4, boxShadow: "0 8px 30px rgba(0,0,0,0.07)" }}
-              transition={{ duration: 0.2 }}
-              className="block snap-center"
-            >
-              <Card className="h-full bg-white border border-gray-100 shadow-sm">
-                <CardContent className="p-6">
-                  <Badge className={cn("rounded-full", badgeColorMap[post.tagColor] || badgeColorMap.default)}>
-                    {post.tag}
-                  </Badge>
-                  <h3 className="text-base font-semibold text-gray-900 mt-3 leading-snug">
-                    {post.title}
-                  </h3>
-                  <p className="text-sm text-gray-500 mt-2 leading-relaxed line-clamp-3">
-                    {post.excerpt || post.description}
-                  </p>
-                  <div className="mt-4 flex items-center justify-between">
-                    <span className="text-xs text-gray-400">{post.readingTime ? `${post.readingTime} min read` : ''}</span>
-                    <span className="text-xs font-medium text-gray-900 hover:underline">
-                      Read on Medium →
-                    </span>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.a>
-          ))}
+          {posts.map((post) => {
+            const slug = post.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")
+            return (
+              <motion.div
+                key={post.id}
+                variants={cardVariants}
+                whileHover={{ y: -4, boxShadow: "0 8px 30px rgba(0,0,0,0.07)" }}
+                transition={{ duration: 0.2 }}
+                className="block snap-center"
+              >
+                <Link to={`/blog/${slug}`}>
+                  <Card className="h-full bg-white border border-gray-100 shadow-sm">
+                    <CardContent className="p-6">
+                      <Badge className={cn("rounded-full", badgeColorMap[post.tagColor] || badgeColorMap.default)}>
+                        {post.tag}
+                      </Badge>
+                      <h3 className="text-base font-semibold text-gray-900 mt-3 leading-snug">
+                        {post.title}
+                      </h3>
+                      <p className="text-sm text-gray-500 mt-2 leading-relaxed line-clamp-3">
+                        {post.excerpt || post.description}
+                      </p>
+                      <div className="mt-4 flex items-center justify-between">
+                        <span className="text-xs text-gray-400">{post.readingTime ? `${post.readingTime} min read` : ''}</span>
+                        <span className="text-xs font-medium text-gray-900 hover:underline">
+                          Read more →
+                        </span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Link>
+              </motion.div>
+            )
+          })}
         </motion.div>
       </div>
     </section>

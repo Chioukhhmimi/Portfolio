@@ -1,8 +1,8 @@
 import { Helmet } from "react-helmet-async"
 
-const SITE_URL = "https://hmimichioukh.com"
+const SITE_URL = "https://hmimi.design"
 const SITE_NAME = "Hmimi Chioukh — Portfolio"
-const DEFAULT_IMAGE = "/og-image.png"
+const DEFAULT_IMAGE = "https://hmimi.design/og-image.png"
 
 export function SEO({
   title,
@@ -12,12 +12,16 @@ export function SEO({
   type = "website",
   noindex = false,
 }) {
-  const pageTitle = title
-    ? `${title} | Hmimi Chioukh`
-    : "Hmimi Chioukh | Product Designer — SaaS, UI/UX, AI"
+  const maxLen = 55
+  const truncatedTitle = title && title.length > maxLen
+    ? `${title.slice(0, maxLen).trimEnd()}…`
+    : title
+  const pageTitle = truncatedTitle
+    ? `${truncatedTitle} | Hmimi Chioukh`
+    : "Hmimi Chioukh | AI Product Designer — SaaS, UI/UX, AI"
   const pageDesc =
     description ||
-    "Product Designer specializing in SaaS platforms, UI/UX design, and AI-powered workflows. View case studies from DadyCar, FocusCare, Shihany, Resaglob."
+    "AI Product Designer building scalable SaaS platforms. Case studies from DadyCar, FocusCare, Shihany, Resaglob."
   const pageImage = image || DEFAULT_IMAGE
   const pageUrl = url ? `${SITE_URL}${url}` : SITE_URL
 

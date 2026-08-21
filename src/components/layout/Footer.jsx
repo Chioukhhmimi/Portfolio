@@ -5,6 +5,8 @@ import { portfolio } from "@/data/portfolio"
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
+  const [hoveredYear, setHoveredYear] = React.useState(false)
+  const [hoveredName, setHoveredName] = React.useState(false)
 
   return (
     <footer className="py-12 px-4 border-t border-gray-100">
@@ -97,12 +99,29 @@ export function Footer() {
 
         <div className="border-t border-gray-100 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-gray-400">
-            © {currentYear} {portfolio.name}. All rights reserved.
+            {"\u00A9"}{" "}
+            <span
+              className={`text-swap cursor-default ${hoveredYear ? "is-active" : ""}`}
+              onMouseEnter={() => setHoveredYear(true)}
+              onMouseLeave={() => setHoveredYear(false)}
+            >
+              <span className="swap-default">{currentYear}</span>
+              <span className="swap-hover">2975</span>
+            </span>{" "}
+            <span
+              className={`text-swap cursor-default ${hoveredName ? "is-active" : ""}`}
+              onMouseEnter={() => setHoveredName(true)}
+              onMouseLeave={() => setHoveredName(false)}
+            >
+              <span className="swap-default">{portfolio.name}</span>
+              <span className="swap-hover">{portfolio.nameZd}</span>
+            </span>
+            . All rights reserved.
           </p>
           <p className="text-sm text-gray-400">
             Designed with{" "}
             <span className="inline-flex group cursor-default">
-              <span className="text-base transition-transform duration-200 group-hover:scale-125 group-hover:rotate-12">❤️</span>
+              <span className="text-base transition-transform duration-200 group-hover:scale-125 group-hover:rotate-12">{"\u2764\uFE0F"}</span>
             </span>{" "}
             <span className="text-progress font-medium">React</span>,{" "}
             <span className="text-progress font-medium">Tailwind CSS</span>{" "}

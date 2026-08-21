@@ -25,6 +25,7 @@ Any team would be lucky to have him!`,
 
 export const portfolio = {
   name: "Hmimi Chioukh",
+  nameZd: "ⵃⵎⴻⵎⵉ ⵛⵉⵡⵅ",
   role: "Product Designer ",
   bio: "I design scalable SaaS platforms and digital experiences.",
   shortBio: "Sr Product Designer, UI/UX Design, AI Design, User Research",

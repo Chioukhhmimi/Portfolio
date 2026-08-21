@@ -54,6 +54,16 @@ export function Navbar() {
     }
   }
 
+  const handleLetsTalk = () => {
+    setIsMobileMenuOpen(false)
+    if (window.location.pathname === "/") {
+      scrollToSection("contact")
+    } else {
+      navigate("/")
+      setTimeout(() => scrollToSection("contact"), 100)
+    }
+  }
+
   return (
     <header
       className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100"
@@ -107,7 +117,7 @@ export function Navbar() {
         {/* Right Side */}
         <div className="flex items-center gap-4">
           <Button size="sm" asChild className="hidden lg:inline-flex">
-            <Link to="/">Let's Talk</Link>
+            <a href="#contact" onClick={(e) => { e.preventDefault(); handleLetsTalk() }}>Let's Talk</a>
           </Button>
 
           {/* Mobile Hamburger */}
@@ -182,7 +192,7 @@ export function Navbar() {
               </div>
               <div className="pt-4 pb-2 px-6">
                 <Button size="sm" asChild className="w-full justify-center">
-                  <Link to="/">Let's Talk</Link>
+                  <a href="#contact" onClick={(e) => { e.preventDefault(); handleLetsTalk() }}>Let's Talk</a>
                 </Button>
               </div>
             </motion.div>

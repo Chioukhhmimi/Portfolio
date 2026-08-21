@@ -63,29 +63,18 @@
 
 /* Tailwind text - color sweep progress bar */
 .text-progress {
-  position: relative;
   display: inline-block;
-  color: #9ca3af;
-  overflow: hidden;
-}
-
-.text-progress::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0%;
-  height: 2px;
-  background: #111827;
-  transition: width 0.5s ease;
+  background: linear-gradient(90deg, #ef4444, #f97316, #eab308, #22c55e, #3b82f6, #8b5cf6, #ec4899, #9ca3af);
+  background-size: 200% 100%;
+  background-position: 100% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: background-position 0.6s ease;
 }
 
 .text-progress:hover {
-  color: #111827;
-}
-
-.text-progress:hover::after {
-  width: 100%;
+  background-position: 0% 0;
 }
 
 /* Framer Motion text - wave letters */
@@ -117,4 +106,39 @@
 @keyframes letterWave {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-4px); }
+}
+
+/* Smooth text swap animation */
+.text-swap {
+  position: relative;
+  display: inline-block;
+}
+
+.text-swap .swap-default,
+.text-swap .swap-hover {
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.text-swap .swap-hover {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  transform: translateY(4px);
+  color: #3b82f6;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.text-swap.is-active .swap-default {
+  opacity: 0;
+  transform: translateY(-4px);
+}
+
+.text-swap.is-active .swap-hover {
+  opacity: 1;
+  transform: translateY(0);
 }

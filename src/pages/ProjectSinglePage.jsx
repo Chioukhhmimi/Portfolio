@@ -111,6 +111,7 @@ export function ProjectSinglePage() {
       <SEO
         title={project?.title}
         description={projectDescription}
+        image={project?.heroImage}
         url={`/projects/${id}`}
         type="article"
       />

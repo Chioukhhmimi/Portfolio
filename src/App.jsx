@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom"
 import { motion, AnimatePresence } from "framer-motion"
 import { Navbar } from "@/components/layout/Navbar"
 import { Footer } from "@/components/layout/Footer"
+import { BackToTop } from "@/components/layout/BackToTop"
 import { Hero } from "@/components/sections/Hero"
 import { LogoStrip } from "@/components/sections/LogoStrip"
 import { About } from "@/components/sections/About"
@@ -12,6 +13,7 @@ import { Projects } from "@/components/sections/Projects"
 import { ContactSection } from "@/components/sections/ContactSection"
 import ProjectSinglePage from "./pages/ProjectSinglePage"
 import ResourcesPage from "./pages/ResourcesPage"
+import BlogPostPage from "./pages/BlogPostPage"
 import { NotFound } from "./pages/NotFound"
 import { SEO } from "@/components/SEO"
 
@@ -54,13 +56,14 @@ function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
+      <BackToTop />
       <AnimatePresence mode="wait">
         <Routes>
           <Route path="/" element={
             <>
               <SEO
                 title={null}
-                description="Hmimi Chioukh — Product Designer specializing in SaaS platforms, UI/UX design, and AI-powered workflows. View case studies from DadyCar, FocusCare, Shihany, Resaglob."
+                description="Hmimi Chioukh — AI Product Designer building scalable SaaS platforms. Case studies from DadyCar, FocusCare, Shihany, Resaglob."
               />
               <Navbar />
               <motion.main
@@ -86,6 +89,11 @@ function App() {
           <Route path="/resources" element={
             <>
               <ResourcesPage />
+            </>
+          } />
+          <Route path="/blog/:slug" element={
+            <>
+              <BlogPostPage />
             </>
           } />
           
