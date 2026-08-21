@@ -1,5 +1,5 @@
 import Message from '../models/Message.js';
-import { sendContactEmail } from '../utils/sendEmail.js';
+import { sendEmail } from '../utils/sendEmail.js';
 
 export const getAllMessages = async (req, res) => {
   try {
@@ -36,7 +36,21 @@ export const createMessage = async (req, res) => {
 
     // Send email notification (blocking for debugging)
     try {
-      await sendContactEmail({ name, email, phone, message });
+      await sendEmail({
+        to: process.env.EMAIL_TO || process.env.EMAIL_USER,
+        subject: `New message from ${name} — Portfolio Contact`,
+        html: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <h2 style="color: #111;">New Contact Form Message</h2>
+            <p><strong>Name:</strong> ${name}</p>
+            <p><strong>Email:</strong> ${email}</p>
+            ${phone ? `<p><strong>Phone:</strong> ${phone}</p>` : ''}
+            <hr />
+            <p>${message}</p>
+          </div>
+        `,
+        text: `New message from ${name}\nEmail: ${email}${phone ? `\nPhone: ${phone}` : ''}\n\n${message}`,
+      });
     } catch (err) {
       console.error('EMAIL_FAILED:', err.message, err.code || '');
     }
