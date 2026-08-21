@@ -39,7 +39,18 @@ app.use('/api/clients', clientsRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 
 app.get('/', (req, res) => {
-  res.json({ status: 'ok' });
+  res.json({
+    status: 'ok',
+    message: 'Portfolio Backend API',
+    endpoints: {
+      projects: '/api/projects',
+      clients: '/api/clients',
+      blog: '/api/blog',
+      auth: '/api/auth',
+      messages: '/api/messages',
+      dashboard: '/api/dashboard',
+    },
+  });
 });
 
 app.use(errorMiddleware);
