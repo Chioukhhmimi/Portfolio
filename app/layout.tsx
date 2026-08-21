@@ -1,5 +1,18 @@
 import type { Metadata } from 'next'
+import { Funnel_Display, Inter } from 'next/font/google'
 import './globals.css'
+
+const funnelDisplay = Funnel_Display({
+  subsets: ['latin'],
+  variable: '--font-sans',
+  display: 'swap',
+})
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-body',
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   title: 'Hmimi Chioukh | AI Product Designer — SaaS, UI/UX, AI',
@@ -39,10 +52,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${funnelDisplay.variable} ${inter.variable}`}>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <meta name="theme-color" content="#0a0a0a" />
       </head>
