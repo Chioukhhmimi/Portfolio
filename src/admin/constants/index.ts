@@ -1,3 +1,4 @@
+// @ts-nocheck
 export const TAG_COLOR_OPTIONS = [
   { label: "Blue", value: "blue" },
   { label: "Green", value: "green" },

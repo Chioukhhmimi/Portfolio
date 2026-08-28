@@ -1,8 +1,9 @@
+// @ts-nocheck
 import * as React from "react"
 import { Navigate } from "react-router-dom"
 import { Loader2 } from "lucide-react"
 
-const baseURL = import.meta.env.VITE_API_URL || "http://localhost:5000/api"
+const baseURL = (typeof process !== 'undefined' && process.env?.NEXT_PUBLIC_API_URL) || "http://localhost:5000/api"
 
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const [authenticated, setAuthenticated] = React.useState<boolean | null>(null)

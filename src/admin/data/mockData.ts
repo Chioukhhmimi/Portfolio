@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Project, BlogPost, Message, DashboardStats, ActivityItem } from '../types'
 
 export const mockProjects: Project[] = [

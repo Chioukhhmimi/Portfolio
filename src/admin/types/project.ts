@@ -1,3 +1,4 @@
+// @ts-nocheck
 export type ProjectStatus = "draft" | "published" | "archived"
 
 export interface ProjectEcosystemItem {

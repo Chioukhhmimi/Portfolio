@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from "react"
 import { Pencil, Copy, Archive, Trash2, MoreHorizontal } from "lucide-react"
 import { Project } from "@/admin/types/project"

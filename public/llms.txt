@@ -1,0 +1,24 @@
+# Hmimi Chioukh — AI Product Designer
+
+## What I Do
+I design scalable SaaS platforms and digital experiences. Product Designer specializing in UI/UX, AI-powered workflows, and design systems.
+
+## Case Studies
+- **DadyCar** — Ride-sharing platform for Algeria. 50K+ users, 200% ROI, 4.6★ App Store rating.
+- **FocusCare** — Telehealth platform for Saudi Arabia. 95% appointment rate, $20M+ revenue, 300K+ patients.
+- **Shihany** — EdTech marketplace connecting tutors and students. 12K+ students, 40% revenue growth.
+- **Resaglob** — Logistics SaaS platform for global operations.
+
+## Skills
+Product Design, UI/UX Design, AI Design, User Research, Design Systems, Figma, React, Tailwind CSS, Prototyping, Accessibility, SaaS, Web Applications
+
+## Links
+- Portfolio: https://hmimi.design
+- LinkedIn: https://linkedin.com/in/hmimi-chioukh
+- Dribbble: https://dribbble.com/chioukh_hmimi
+- GitHub: https://github.com/Chioukhhmimi
+- Behance: https://www.behance.net/thekinghc16490
+- Email: mailto:chioukh.hmimi@gmail.com
+
+## Contact
+Available for freelance product design, SaaS consulting, and AI UX projects.

@@ -1,26 +1,35 @@
-import { MongoClient } from 'mongodb';
-import dotenv from 'dotenv';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import Parser from 'rss-parser';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-dotenv.config({ path: path.resolve(__dirname, '../.env') });
+const parser = new Parser();
+const feed = await parser.parseURL('https://medium.com/feed/@hmimichiouukh');
 
-const checkProjects = async () => {
-  let client;
-  try {
-    client = new MongoClient(process.env.MONGO_URI);
-    await client.connect();
-    const db = client.db();
-    const projects = await db.collection('projects').find({}, { projection: { id: 1, heroImage: 1, image: 1 } }).toArray();
-    console.log(JSON.stringify(projects, null, 2));
-    await client.close();
-    process.exit(0);
-  } catch (error) {
-    console.error(error);
-    if (client) await client.close();
-    process.exit(1);
+for (const item of feed.items) {
+  const content = item['content:encoded'] || '';
+  const imgs = content.match(/<img[^>]+>/g) || [];
+  const pictures = content.match(/<picture[\s\S]*?<\/picture>/g) || [];
+  const noscripts = content.match(/<noscript[\s\S]*?<\/noscript>/g) || [];
+  const dataSrcs = content.match(/data-src="[^"]+"/g) || [];
+
+  const contentImgs = imgs.filter(i => !i.includes('medium.com/_/stat'));
+
+  console.log(`--- ${item.title} ---`);
+  console.log(`  Content: ${content.length} chars`);
+  console.log(`  <img> total: ${imgs.length} (content: ${contentImgs.length}, tracking: ${imgs.length - contentImgs.length})`);
+  console.log(`  <picture>: ${pictures.length}`);
+  console.log(`  <noscript>: ${noscripts.length}`);
+  console.log(`  data-src: ${dataSrcs.length}`);
+
+  if (pictures.length > 0) {
+    console.log('  PICTURE tags found:');
+    for (const p of pictures) {
+      const src = p.match(/src="([^"]+)"/);
+      if (src) console.log(`    ${src[1].substring(0, 80)}`);
+    }
   }
-};
-
-checkProjects();
+  if (noscripts.length > 0) {
+    for (const n of noscripts) {
+      const innerImgs = n.match(/<img[^>]+src="([^"]+)"/g) || [];
+      if (innerImgs.length > 0) console.log(`  noscript imgs: ${innerImgs.length}`);
+    }
+  }
+}

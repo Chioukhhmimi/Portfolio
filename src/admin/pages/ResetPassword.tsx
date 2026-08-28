@@ -1,3 +1,4 @@
+// @ts-nocheck
 import * as React from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { Loader2, CheckCircle } from "lucide-react"

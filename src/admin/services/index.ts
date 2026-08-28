@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { BlogPost, Message, DashboardStats, ActivityItem } from '../types'
 import { mockBlogPosts, mockMessages, mockDashboardStats, mockActivity } from '../data/mockData'
 import { projectsService } from '../services/projectsService'

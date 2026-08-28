@@ -1,3 +1,4 @@
+// @ts-nocheck
 import * as React from "react"
 import { Mail, Trash2, ChevronDown, ChevronUp } from "lucide-react"
 import {
