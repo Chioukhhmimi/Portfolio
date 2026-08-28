@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///E:/Portfolio/app/blog/[slug]/BlogPostClient.tsx"],"sourcesContent":["'use client'\nimport Link from \"next/link\"\n\nexport function BlogPostClient() {\n  return (\n    <div className=\"min-h-screen bg-white flex items-center justify-center\">\n      <div className=\"text-center\">\n        <p className=\"text-6xl font-bold text-gray-200 mb-4\">404</p>\n        <h1 className=\"text-2xl font-bold text-gray-900 mb-2\">Post not found</h1>\n        <p className=\"text-sm text-gray-500 mb-4\">This post may have been moved or is no longer available.</p>\n        <Link href=\"/\" className=\"text-sm text-gray-500 hover:text-gray-900 inline-block\">← Back to Home</Link>\n      </div>\n    </div>\n  )\n}\n"],"names":["BlogPostClient","className","href"],"mappings":";;;;;AACA;AADA;;;AAGO,SAASA;IACd,qBACE,6LAAC;QAAIC,WAAU;kBACb,cAAA,6LAAC;YAAIA,WAAU;;8BACb,6LAAC;oBAAEA,WAAU;8BAAwC;;;;;;8BACrD,6LAAC;oBAAGA,WAAU;8BAAwC;;;;;;8BACtD,6LAAC;oBAAEA,WAAU;8BAA6B;;;;;;8BAC1C,6LAAC,0KAAI;oBAACC,MAAK;oBAAID,WAAU;8BAAyD;;;;;;;;;;;;;;;;;AAI1F;KAXgBD"}}]
+}

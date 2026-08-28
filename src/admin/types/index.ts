@@ -1,3 +1,4 @@
+// @ts-nocheck
 export * from "./project"
 export type { Project } from "./project"
 

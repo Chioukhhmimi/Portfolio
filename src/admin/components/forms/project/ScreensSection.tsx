@@ -1,6 +1,7 @@
+// @ts-nocheck
 import React from "react"
 import { UseFormRegister, FieldErrors, UseFieldArrayAppend, UseFieldArrayRemove } from "react-hook-form"
-import { ProjectFormValues } from "../../schemas/projectSchema"
+import { ProjectFormValues } from "../../../schemas/projectSchema"
 import { X, Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 

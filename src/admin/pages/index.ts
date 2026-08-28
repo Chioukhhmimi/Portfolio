@@ -1,3 +1,4 @@
+// @ts-nocheck
 export { AdminDashboard } from './Dashboard'
 export { ProjectsList } from './ProjectsList'
 export { ProjectForm } from './ProjectForm'

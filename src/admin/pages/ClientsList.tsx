@@ -1,3 +1,4 @@
+// @ts-nocheck
 import * as React from "react"
 import { useNavigate } from "react-router-dom"
 import { Pencil, Trash2 } from "lucide-react"

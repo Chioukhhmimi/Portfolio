@@ -20,6 +20,9 @@ const blogSchema = new mongoose.Schema({
     type: String,
   },
   readingTime: {
+    type: Number,
+  },
+  content: {
     type: String,
   },
   tags: [{
@@ -37,15 +40,7 @@ const blogSchema = new mongoose.Schema({
   publishedAt: {
     type: Date,
   },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now,
-  },
-});
+}, { timestamps: true });
 
 const Blog = mongoose.model('Blog', blogSchema);
 

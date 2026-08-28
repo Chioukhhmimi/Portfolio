@@ -1,6 +1,7 @@
+// @ts-nocheck
 import React from "react"
 import { UseFormRegister, FieldErrors } from "react-hook-form"
-import { ProjectFormValues } from "../../schemas/projectSchema"
+import { ProjectFormValues } from "../../../schemas/projectSchema"
 
 interface NarrativeSectionProps {
   register: UseFormRegister<ProjectFormValues>

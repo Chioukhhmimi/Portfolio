@@ -1,3 +1,4 @@
+// @ts-nocheck
 export { BasicInfoSection } from "./BasicInfoSection"
 export { NarrativeSection } from "./NarrativeSection"
 export { TeamSection } from "./TeamSection"

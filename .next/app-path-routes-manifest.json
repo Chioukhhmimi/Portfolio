@@ -1,0 +1,11 @@
+{
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found",
+  "/admin/[[...slug]]/page": "/admin/[[...slug]]",
+  "/blog/[slug]/page": "/blog/[slug]",
+  "/page": "/",
+  "/projects/[id]/page": "/projects/[id]",
+  "/resources/page": "/resources",
+  "/robots.txt/route": "/robots.txt",
+  "/sitemap.xml/route": "/sitemap.xml"
+}

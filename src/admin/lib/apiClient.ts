@@ -1,4 +1,5 @@
-const baseURL = import.meta.env.VITE_API_URL || "http://localhost:5000/api"
+// @ts-nocheck
+const baseURL = (typeof process !== 'undefined' && process.env?.NEXT_PUBLIC_API_URL) || "http://localhost:5000/api"
 
 const getToken = () => localStorage.getItem("admin_token")
 

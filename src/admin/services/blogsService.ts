@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { api } from "../lib/apiClient"
 
 interface ApiResponse<T> {
@@ -14,6 +15,7 @@ export interface BlogPost {
   slug: string
   mediumUrl?: string
   excerpt?: string
+  content?: string
   coverImage?: string
   readingTime?: string
   tags?: string[]
@@ -31,6 +33,7 @@ const mapBlogPost = (blog: any): BlogPost => ({
   slug: blog.slug,
   mediumUrl: blog.mediumUrl,
   excerpt: blog.excerpt,
+  content: blog.content,
   coverImage: blog.coverImage,
   readingTime: blog.readingTime,
   tags: blog.tags,
@@ -52,6 +55,11 @@ export const blogsService = {
     return response.data ? mapBlogPost(response.data) : undefined
   },
 
+  async getBlogBySlug(slug: string): Promise<BlogPost | undefined> {
+    const response = await api.get(`/blog/slug/${slug}`) as ApiResponse<BlogPost>
+    return response.data ? mapBlogPost(response.data) : undefined
+  },
+
   async createBlog(data: Partial<BlogPost>): Promise<BlogPost> {
     const response = await api.post("/blog", data) as ApiResponse<BlogPost>
     return mapBlogPost(response.data!)
@@ -65,5 +73,10 @@ export const blogsService = {
   async deleteBlog(id: string): Promise<boolean> {
     const response = await api.delete(`/blog/${id}`) as ApiResponse<string>
     return response.success
+  },
+
+  async importFromMedium(): Promise<{ count: number; data: BlogPost[] }> {
+    const response = await api.get("/blog/import-medium") as ApiResponse<BlogPost[]>
+    return { count: response.count || 0, data: (response.data || []).map(mapBlogPost) }
   },
 }

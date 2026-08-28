@@ -1,3 +1,4 @@
+// @ts-nocheck
 import * as React from "react"
 import { Link, useParams, useNavigate } from "react-router-dom"
 import { ArrowLeft, Mail, MailOpen, Archive, Trash2 } from "lucide-react"

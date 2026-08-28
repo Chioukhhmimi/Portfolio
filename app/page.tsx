@@ -1,17 +1,43 @@
-export default function HomePage() {
+import { Metadata } from "next"
+import { HomeClient } from "@/components/sections/HomeClient"
+import { StructuredData } from "@/components/seo/StructuredData"
+
+export const metadata: Metadata = {
+  title: "Hmimi Chioukh | AI Product Designer — SaaS, UI/UX",
+  description: "Hmimi Chioukh — AI Product Designer building scalable SaaS platforms. Case studies from DadyCar, FocusCare, Shihany, Resaglob.",
+  keywords: ['AI Product Designer', 'UI/UX Design', 'SaaS Design', 'Product Designer Portfolio', 'Figma', 'React', 'User Research', 'Design Systems', 'Hmimi Chioukh'],
+  openGraph: {
+    title: "Hmimi Chioukh — AI Product Designer",
+    description: "AI Product Designer building scalable SaaS platforms. Case studies from DadyCar, FocusCare, Shihany, Resaglob.",
+    url: "https://hmimi.design",
+    siteName: "Hmimi Chioukh — Portfolio",
+    images: [
+      {
+        url: "https://hmimi.design/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Hmimi Chioukh — AI Product Designer",
+      },
+    ],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Hmimi Chioukh — AI Product Designer",
+    description: "AI Product Designer building scalable SaaS platforms. Case studies from DadyCar, FocusCare, Shihany, Resaglob.",
+    images: ["https://hmimi.design/og-image.png"],
+  },
+  authors: [{ name: "Hmimi Chioukh" }],
+  alternates: {
+    canonical: "https://hmimi.design",
+  },
+}
+
+export default function Home() {
   return (
-    <main className="min-h-screen bg-white">
-      <div className="max-w-4xl mx-auto px-6 py-24 text-center">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">
-          Hmimi Chioukh — AI Product Designer
-        </h1>
-        <p className="text-lg text-gray-500 mb-8">
-          Building scalable SaaS platforms. Case studies from DadyCar, FocusCare, Shihany, Resaglob.
-        </p>
-        <p className="text-sm text-gray-400">
-          Phase 1 complete — Next.js is running. Ready for Phase 2.
-        </p>
-      </div>
-    </main>
+    <>
+      <StructuredData page="home" />
+      <HomeClient />
+    </>
   )
 }

@@ -1,0 +1,16 @@
+User-Agent: *
+Allow: /
+Disallow: /admin/
+
+User-Agent: GPTBot
+User-Agent: ChatGPT-User
+Allow: /
+
+User-Agent: ClaudeBot
+User-Agent: anthropic-ai
+Allow: /
+
+User-Agent: PerplexityBot
+Allow: /
+
+Sitemap: https://hmimi.design/sitemap.xml

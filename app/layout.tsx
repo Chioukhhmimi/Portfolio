@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 import { Funnel_Display, Inter } from 'next/font/google'
+import { Navbar } from '@/components/layout/Navbar'
+import { Footer } from '@/components/layout/Footer'
 import './globals.css'
 
 const funnelDisplay = Funnel_Display({
@@ -15,35 +17,31 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: 'Hmimi Chioukh | AI Product Designer — SaaS, UI/UX, AI',
-  description: 'Hmimi Chioukh — AI Product Designer building scalable SaaS platforms. Case studies from DadyCar, FocusCare, Shihany, Resaglob.',
   metadataBase: new URL('https://hmimi.design'),
+  title: {
+    default: 'Hmimi Chioukh | AI Product Designer — SaaS, UI/UX',
+    template: '%s | Hmimi Chioukh',
+  },
+  description: 'Hmimi Chioukh — AI Product Designer building scalable SaaS platforms. Case studies from DadyCar, FocusCare, Shihany, Resaglob.',
+  keywords: ['AI Product Designer', 'UI/UX Design', 'SaaS Design', 'Product Designer', 'Figma', 'React', 'User Research', 'Design Systems'],
+  robots: {
+    index: true,
+    follow: true,
+  },
+  other: {
+    'geo.region': 'DZ',
+    'geo.placename': 'Algeria',
+  },
   openGraph: {
-    type: 'website',
-    title: 'Hmimi Chioukh — AI Product Designer',
-    description: 'AI Product Designer building scalable SaaS platforms. Case studies from DadyCar, FocusCare, Shihany, Resaglob.',
-    url: 'https://hmimi.design',
-    siteName: 'Hmimi Chioukh — Portfolio',
     images: [
       {
-        url: '/og-image.png',
+        url: 'https://hmimi.design/og-image.png',
         width: 1200,
         height: 630,
         alt: 'Hmimi Chioukh — AI Product Designer',
       },
     ],
   },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Hmimi Chioukh — AI Product Designer',
-    description: 'AI Product Designer building scalable SaaS platforms. Case studies from DadyCar, FocusCare, Shihany, Resaglob.',
-    images: ['/og-image.png'],
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-  authors: [{ name: 'Hmimi Chioukh' }],
 }
 
 export default function RootLayout({
@@ -54,10 +52,14 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${funnelDisplay.variable} ${inter.variable}`}>
       <head>
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="icon" type="image/png" href="/icon.png" />
         <meta name="theme-color" content="#0a0a0a" />
       </head>
-      <body>{children}</body>
+      <body suppressHydrationWarning>
+        <Navbar />
+        {children}
+        <Footer />
+      </body>
     </html>
   )
 }
