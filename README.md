@@ -1,16 +1,92 @@
-# React + Vite
+# Portfolio — Hmimi Chioukh
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Personal portfolio website showcasing SaaS design case studies. Full-stack app with admin panel for content management.
 
-Currently, two official plugins are available:
+**Live:** [hmimi.design](https://hmimi.design)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Tech Stack
 
-## React Compiler
+| Layer | Technologies |
+|-------|-------------|
+| Frontend | Next.js 16 (App Router), React 19, Tailwind CSS 3, Framer Motion |
+| Backend | Express.js, MongoDB, Mongoose, JWT Auth |
+| Admin Panel | TypeScript, Zod, React Hook Form |
+| Integrations | Cloudinary, Nodemailer, rss-parser (Medium) |
+| Testing | Playwright E2E |
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Project Structure
 
-## Expanding the ESLint configuration
+```
+├── app/                  # Next.js App Router pages
+│   ├── projects/[id]/    # Dynamic case study pages
+│   ├── blog/[slug]/      # Blog post pages
+│   ├── resources/        # Free Figma resources
+│   └── admin/            # Admin panel (React Router SPA)
+├── components/
+│   ├── sections/         # Hero, Projects, Blog, Contact, etc.
+│   ├── seo/              # JSON-LD structured data
+│   └── ui/               # shadcn/ui components
+├── src/
+│   ├── data/             # Static portfolio data
+│   └── admin/            # Full admin panel (TypeScript)
+├── backend/              # Express API server (port 5000)
+│   ├── src/models/       # Mongoose schemas
+│   ├── src/controllers/  # Route handlers
+│   └── src/routes/       # API routes
+├── tests/                # Playwright E2E tests
+└── SEO/                  # Audit documents
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Getting Started
+
+```bash
+# Frontend
+npm install
+npm run dev        # localhost:3000
+
+# Backend
+cd backend
+npm install
+npm run dev        # localhost:5000
+
+# Seed data
+npm run seed
+npm run seed:admin
+```
+
+## Commands
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start Next.js dev server (Turbopack) |
+| `npm run build` | Production build |
+| `npm run lint` | Run ESLint |
+| `npx playwright test` | Run E2E tests |
+
+## Features
+
+- **SEO-first architecture** — metadata API, auto sitemap/robots, JSON-LD (Person, Article, CreativeWork, BreadcrumbList, FAQPage), OpenGraph + Twitter cards
+- **AI bot-friendly** — explicit allow rules for GPTBot, ClaudeBot, PerplexityBot
+- **Admin panel** — JWT-protected CRUD for projects, clients, blog, messages
+- **Admin noindex protection** — all `/admin/*` routes inject `noindex, nofollow`
+- **Bilingual display** — Tifinagh script + Latin name
+- **Medium blog import** — RSS-based blog post syncing
+- **Cloudinary images** — hosted image management with migration scripts
+
+## Environment Variables
+
+```bash
+# Frontend (.env.local)
+NEXT_PUBLIC_API_URL=http://localhost:5000/api
+
+# Backend (backend/.env)
+MONGODB_URI=your_mongodb_uri
+JWT_SECRET=your_jwt_secret
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+```
+
+## License
+
+Private
