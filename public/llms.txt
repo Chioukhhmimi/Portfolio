@@ -1,24 +1,34 @@
 # Hmimi Chioukh — AI Product Designer
 
-## What I Do
-I design scalable SaaS platforms and digital experiences. Product Designer specializing in UI/UX, AI-powered workflows, and design systems.
+## About
+Hmimi Chioukh is an AI Product Designer based in Algeria, specializing in building scalable SaaS platforms and digital experiences. Expertise spans UI/UX design, user research, design systems, and AI-powered product design.
+
+## Services
+- SaaS Product Design (0→1 and iteration)
+- UI/UX Design & Prototyping
+- User Research & Usability Testing
+- Design Systems & Component Libraries
+- AI Interface Design
+- Frontend Development (React, Tailwind CSS)
 
 ## Case Studies
-- **DadyCar** — Ride-sharing platform for Algeria. 50K+ users, 200% ROI, 4.6★ App Store rating.
-- **FocusCare** — Telehealth platform for Saudi Arabia. 95% appointment rate, $20M+ revenue, 300K+ patients.
-- **Shihany** — EdTech marketplace connecting tutors and students. 12K+ students, 40% revenue growth.
-- **Resaglob** — Logistics SaaS platform for global operations.
+- DadyCar: Fleet management SaaS platform
+- FocusCare: Healthcare SaaS platform
+- Shihany: Business management platform
+- Resaglob: Global business platform
 
-## Skills
-Product Design, UI/UX Design, AI Design, User Research, Design Systems, Figma, React, Tailwind CSS, Prototyping, Accessibility, SaaS, Web Applications
-
-## Links
-- Portfolio: https://hmimi.design
-- LinkedIn: https://linkedin.com/in/hmimi-chioukh
-- Dribbble: https://dribbble.com/chioukh_hmimi
-- GitHub: https://github.com/Chioukhhmimi
-- Behance: https://www.behance.net/thekinghc16490
-- Email: mailto:chioukh.hmimi@gmail.com
+## Blog
+- AI workflow for product designers
+- Vehicle monitoring UX improvements
+- Bulk import workflow design
+- UX case studies and process insights
 
 ## Contact
-Available for freelance product design, SaaS consulting, and AI UX projects.
+- Website: https://hmimi.design
+- LinkedIn: https://linkedin.com/in/hmimi-chioukh
+- Email: hmimichiouukh@gmail.com
+- Dribbble: https://dribbble.com/chioukh_hmimi
+- Behance: https://www.behance.net/thekinghc16490
+
+## Location
+Tizi Ouzou, Algeria (Available for remote work worldwide)

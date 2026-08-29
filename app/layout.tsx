@@ -20,11 +20,11 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL('https://hmimi.design'),
   title: {
-    default: 'Hmimi Chioukh | AI Product Designer — SaaS, UI/UX',
+    default: 'AI Product Designer | Hmimi Chioukh — SaaS, UI/UX Portfolio',
     template: '%s | Hmimi Chioukh',
   },
-  description: 'Hmimi Chioukh — AI Product Designer building scalable SaaS platforms. Case studies from DadyCar, FocusCare, Shihany, Resaglob.',
-  keywords: ['AI Product Designer', 'UI/UX Design', 'SaaS Design', 'Product Designer', 'Figma', 'React', 'User Research', 'Design Systems'],
+  description: 'AI Product Designer specializing in scalable SaaS platforms, UI/UX design, and user research. View case studies from DadyCar, FocusCare, Shihany, Resaglob.',
+  keywords: ['AI Product Designer', 'Product Designer Portfolio', 'UI/UX Designer', 'SaaS Design', 'User Research', 'Design Systems', 'Figma', 'React'],
   robots: {
     index: true,
     follow: true,
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
         url: 'https://hmimi.design/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'Hmimi Chioukh — AI Product Designer',
+        alt: 'Hmimi Chioukh — AI Product Designer Portfolio',
       },
     ],
   },
