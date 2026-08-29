@@ -91,3 +91,41 @@ Rules:
 
 ### Skill Check Command
 User may run `npx skill check` — list all installed skills with status.
+
+---
+
+## Progress Tracking Rule
+
+**ALWAYS save work progress, tasks, and discussions in `.md` files after each conversation.**
+
+- Create timestamped files: `seo-audit-YYYY-MM-DD.md`, `tasks-YYYY-MM-DD.md`, etc.
+- Update this CLAUDE.md with links to active task files
+- Include: decisions made, blockers, next steps, completed work
+
+---
+
+## Active Tasks & History
+
+### SEO Optimization (2026-08-22)
+- **Status**: Audit complete, fixes pending
+- **File**: `seo-audit-2026-08-22.md`
+- **Top Issues**:
+  1. Blog pages 100% client-rendered (invisible to crawlers)
+  2. Homepage missing metadata
+  3. Zero structured data (JSON-LD)
+  4. No canonical tags
+  5. Sitemap hardcodes blog slugs
+- **Next**: Implement Critical fixes (prioritized action plan in audit file)
+
+### SEO Ranking Strategy (2026-08-29)
+- **Status**: Strategy complete, implementation pending
+- **File**: `seo-ranking-strategy-2026-08-29.md`
+- **Session Progress**: `session-progress-2026-08-29.md`
+- **Goal**: Rank #1 for Product Design, UI/UX, AI Design, SaaS Design keywords
+- **Key Actions**:
+  1. Create llms.txt for AI agents
+  2. Add FAQ content to homepage
+  3. Build third-party presence (LinkedIn, Reddit)
+  4. Add extractable content blocks
+  5. Create services.md for AI parsing
+- **Next**: Implement Week 1 foundation tasks
