@@ -5,10 +5,30 @@ import { StructuredData } from "@/components/seo/StructuredData"
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api"
 
 async function getProject(id: string) {
-  const res = await fetch(`${API_URL}/projects/${id}`, { cache: "no-store" })
-  if (!res.ok) return null
-  const data = await res.json()
-  return data.data
+  try {
+    const res = await fetch(`${API_URL}/projects/${id}`, { cache: "no-store" })
+    if (!res.ok) return null
+    const data = await res.json()
+    return data.data
+  } catch {
+    return null
+  }
+}
+
+async function getAllProjectIds(): Promise<string[]> {
+  try {
+    const res = await fetch(`${API_URL}/projects`, { next: { revalidate: 3600 } })
+    if (!res.ok) return []
+    const { data } = await res.json()
+    return (data || []).map((p: any) => p._id || p.id)
+  } catch {
+    return []
+  }
+}
+
+export async function generateStaticParams() {
+  const ids = await getAllProjectIds()
+  return ids.map((id) => ({ id }))
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
@@ -86,7 +106,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
         }
         faq={projectFAQs[id] || []}
       />
-      <ProjectClient id={id} />
+      <ProjectClient id={id} initialProject={project} />
     </>
   )
 }

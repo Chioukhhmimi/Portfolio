@@ -20,15 +20,17 @@ const staggerStat = {
   transition: { staggerChildren: 0.1 },
 }
 
-export function ProjectClient({ id }: { id: string }) {
+export function ProjectClient({ id, initialProject }: { id: string; initialProject?: any }) {
   const router = useRouter()
-  const [project, setProject] = React.useState<any>(null)
-  const [loading, setLoading] = React.useState(true)
+  const [project, setProject] = React.useState<any>(initialProject || null)
+  const [loading, setLoading] = React.useState(!initialProject)
   const [error, setError] = React.useState<string | null>(null)
 
   React.useEffect(() => { window.scrollTo(0, 0) }, [id])
 
   React.useEffect(() => {
+    if (initialProject) return
+
     const loadProject = async () => {
       try {
         setLoading(true)
@@ -41,7 +43,7 @@ export function ProjectClient({ id }: { id: string }) {
       }
     }
     if (id) loadProject()
-  }, [id])
+  }, [id, initialProject])
 
   if (loading) {
     return <div className="min-h-screen bg-white flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-gray-400" /></div>

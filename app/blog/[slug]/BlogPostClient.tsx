@@ -20,12 +20,14 @@ interface BlogPost {
   publishedAt?: string
 }
 
-export function BlogPostClient({ slug }: { slug: string }) {
-  const [post, setPost] = React.useState<BlogPost | null>(null)
-  const [loading, setLoading] = React.useState(true)
+export function BlogPostClient({ slug, initialPost }: { slug: string; initialPost: BlogPost | null }) {
+  const [post, setPost] = React.useState<BlogPost | null>(initialPost)
+  const [loading, setLoading] = React.useState(!initialPost)
   const [notFound, setNotFound] = React.useState(false)
 
   React.useEffect(() => {
+    if (initialPost) return
+
     const fetchPost = async () => {
       try {
         const res = await fetch(`${baseURL}/blog/slug/${slug}`)
@@ -46,7 +48,7 @@ export function BlogPostClient({ slug }: { slug: string }) {
       }
     }
     fetchPost()
-  }, [slug])
+  }, [slug, initialPost])
 
   if (loading) {
     return (

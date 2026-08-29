@@ -11,10 +11,30 @@ async function findPost(slug: string) {
     const { data } = await res.json()
     return data?.find(
       (p: any) => p.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") === slug
-    )
+    ) || null
   } catch {
     return null
   }
+}
+
+async function getAllSlugs(): Promise<string[]> {
+  try {
+    const res = await fetch(`${baseURL}/blog`, { next: { revalidate: 3600 } })
+    if (!res.ok) return []
+    const { data } = await res.json()
+    return (data || [])
+      .filter((p: any) => p.status === "published")
+      .map((p: any) =>
+        p.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")
+      )
+  } catch {
+    return []
+  }
+}
+
+export async function generateStaticParams() {
+  const slugs = await getAllSlugs()
+  return slugs.map((slug) => ({ slug }))
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -68,7 +88,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             : undefined
         }
       />
-      <BlogPostClient slug={slug} />
+      <BlogPostClient slug={slug} initialPost={post} />
     </>
   )
 }

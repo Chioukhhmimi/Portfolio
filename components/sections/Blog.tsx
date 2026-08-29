@@ -6,6 +6,13 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { fetchBlogPosts } from "@/lib/api"
 import { cn } from "@/lib/utils"
+import { portfolio } from "@/data/portfolio"
+
+const fallbackPosts = portfolio.blogPosts.map((p: any) => ({
+  ...p,
+  readingTime: typeof p.readTime === "string" ? parseInt(p.readTime) || 5 : p.readTime || 5,
+  excerpt: p.description,
+}))
 
 const badgeColorMap: Record<string, string> = {
   blue: "bg-blue-50 text-blue-600",
@@ -45,9 +52,10 @@ export function Blog() {
     const loadPosts = async () => {
       try {
         const data = await fetchBlogPosts()
-        setPosts(data.filter((p: any) => p.status === 'published'))
-      } catch (err) {
-        console.error('Failed to load blog posts:', err)
+        const published = data.filter((p: any) => p.status === 'published')
+        setPosts(published.length > 0 ? published : fallbackPosts)
+      } catch {
+        setPosts(fallbackPosts)
       } finally {
         setLoading(false)
       }
