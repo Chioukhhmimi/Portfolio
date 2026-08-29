@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Funnel_Display, Inter } from 'next/font/google'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
+import { GoogleAnalytics } from '@/components/GoogleAnalytics'
 import './globals.css'
 
 const funnelDisplay = Funnel_Display({
@@ -56,6 +57,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#0a0a0a" />
       </head>
       <body suppressHydrationWarning>
+        <GoogleAnalytics />
         <Navbar />
         {children}
         <Footer />
